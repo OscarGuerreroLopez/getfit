@@ -14,7 +14,10 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@getfit/exercise": ["libs/exercise/src/index.ts"],
+      "@getfit/user": ["libs/user/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }

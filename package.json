@@ -5,7 +5,12 @@
   "scripts": {
     "start": "nx serve",
     "build": "nx build",
-    "test": "nx test"
+    "test": "nx test",
+    "serve:all": "NODE_ENV=local nx run-many --target=serve --projects=user,exercise --parallel",
+    "build:all": "nx run-many --target=build --projects=user,exercise --parallel",
+    "deploy:user": "nx deploy user",
+    "deploy:exercise": "nx deploy exercise",
+    "deploy": "nx affected --target=deploy"
   },
   "private": true,
   "dependencies": {
@@ -24,7 +29,7 @@
     "@nrwl/jest": "14.8.5",
     "@nrwl/linter": "14.8.5",
     "@nrwl/nest": "14.8.5",
-    "@nrwl/node": "14.8.5",
+    "@nrwl/node": "^14.8.5",
     "@nrwl/workspace": "14.8.5",
     "@types/jest": "28.1.1",
     "@types/node": "16.11.7",

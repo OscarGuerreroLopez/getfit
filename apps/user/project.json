@@ -1,7 +1,7 @@
 {
-  "name": "exercise",
+  "name": "user",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/exercise/src",
+  "sourceRoot": "apps/user/src",
   "projectType": "application",
   "targets": {
     "build": {
@@ -10,10 +10,10 @@
       "options": {
         "target": "node",
         "compiler": "tsc",
-        "outputPath": "dist/apps/exercise",
-        "main": "apps/exercise/src/main.ts",
-        "tsConfig": "apps/exercise/tsconfig.app.json",
-        "assets": ["apps/exercise/src/assets"],
+        "outputPath": "dist/apps/user",
+        "main": "apps/user/src/main.ts",
+        "tsConfig": "apps/user/tsconfig.app.json",
+        "assets": ["apps/user/src/assets"],
         "generatePackageJson": true
       },
       "configurations": {
@@ -23,8 +23,8 @@
           "inspect": false,
           "fileReplacements": [
             {
-              "replace": "apps/exercise/src/environments/environment.ts",
-              "with": "apps/exercise/src/environments/environment.prod.ts"
+              "replace": "apps/user/src/environments/environment.ts",
+              "with": "apps/user/src/environments/environment.prod.ts"
             }
           ]
         }
@@ -33,11 +33,11 @@
     "serve": {
       "executor": "@nrwl/js:node",
       "options": {
-        "buildTarget": "exercise:build"
+        "buildTarget": "user:build"
       },
       "configurations": {
         "production": {
-          "buildTarget": "exercise:build:production"
+          "buildTarget": "user:build:production"
         }
       }
     },
@@ -45,14 +45,14 @@
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["apps/exercise/**/*.ts"]
+        "lintFilePatterns": ["apps/user/**/*.ts"]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/apps/exercise"],
+      "outputs": ["coverage/apps/user"],
       "options": {
-        "jestConfig": "apps/exercise/jest.config.ts",
+        "jestConfig": "apps/user/jest.config.ts",
         "passWithNoTests": true
       }
     },
@@ -60,9 +60,9 @@
       "executor": "@nrwl/workspace:run-commands",
       "options": {
         "commands": [
-          "nx lint exercise",
-          "nx build exercise",
-          "docker build -f ./apps/exercise/Dockerfile . -t exercise"
+          "nx lint user",
+          "nx build user",
+          "docker build -f ./apps/user/Dockerfile . -t user"
         ],
         "parallel": false
       }

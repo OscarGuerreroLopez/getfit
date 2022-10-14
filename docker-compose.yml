@@ -1,0 +1,10 @@
+version: '3.8'
+services:
+  exercise:
+    image: exercise
+    ports:
+      - '3334:3334'
+  user:
+    image: user
+    ports:
+      - '3333:3333'

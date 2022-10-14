@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { exercise } from "@getfit/exercise";
+import { user } from "@getfit/user";
+
 
 @Injectable()
 export class AppService {
   getData(): { message: string } {
-    return { message: exercise() };
+    return { message: user() };
   }
 }

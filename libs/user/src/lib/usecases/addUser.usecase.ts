@@ -1,6 +1,6 @@
 import { IBcryptService, ILogger } from '@getfit/domain';
-import { UserModel, UserModelWithoutPassword } from '../domain/model';
-import { UserRepository } from '../domain/repositories';
+import { UserModel, UserModelWithoutPassword } from '../entities/model';
+import { UserRepository } from '../entities/repositories';
 
 export class AddUserUseCase {
   constructor(

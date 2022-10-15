@@ -1,5 +1,5 @@
-import { UserModelWithoutPassword } from '../domain/model';
-import { UserRepository } from '../domain/repositories';
+import { UserModelWithoutPassword } from '../entities/model';
+import { UserRepository } from '../entities/repositories';
 
 export class GetUserUseCase {
   constructor(private readonly userRepository: UserRepository) {}

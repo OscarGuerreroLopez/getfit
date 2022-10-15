@@ -20,11 +20,18 @@ export class UserRepository implements UserDomainRepository {
   ) {}
 
   async getUserByUsername(username: string): Promise<UserModel> {
-    const userDetailEntity = await this.userEntityRepository.findOneOrFail({
+    const userDetailEntity = await this.userEntityRepository.findOne({
       where: { username },
     });
 
-    return this.toUserModel(userDetailEntity);
+    if (!userDetailEntity) {
+      this.exceptionService.userNotFound({
+        message: `User ${username} not found`,
+        code_error: 404,
+      });
+    }
+
+    return this.toUserModel(userDetailEntity as UserEntity);
   }
 
   async insertUser(userModel: UserModel): Promise<UserModel> {
@@ -38,9 +45,7 @@ export class UserRepository implements UserDomainRepository {
   }
 
   private toUserModel(userDetailEntity: UserEntity): UserModel {
-    const userDetail: UserModel = new UserModel();
-
-    if (!userDetailEntity.id) {
+    if (!userDetailEntity?.id) {
       this.loggerService.warn(
         'toUser missing entity',
         JSON.stringify(userDetailEntity)
@@ -49,7 +54,7 @@ export class UserRepository implements UserDomainRepository {
         message: 'Error converting user, check logs',
       });
     }
-
+    const userDetail: UserModel = new UserModel();
     userDetail.id = userDetailEntity.id;
     userDetail.username = userDetailEntity.username;
     userDetail.password = userDetailEntity.password;

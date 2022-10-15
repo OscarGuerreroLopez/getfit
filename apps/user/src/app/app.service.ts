@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { user } from "@getfit/user";
-
+import { user } from '@getfit/user';
 
 @Injectable()
 export class AppService {

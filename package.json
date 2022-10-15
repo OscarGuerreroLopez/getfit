@@ -10,15 +10,19 @@
     "build:all": "nx run-many --target=build --projects=user,exercise --parallel",
     "deploy:user": "nx deploy user",
     "deploy:exercise": "nx deploy exercise",
-    "deploy": "nx affected --target=deploy"
+    "deploy": "nx affected --target=deploy",
+    "lint": "nx format:check"
   },
   "private": true,
   "dependencies": {
     "@nestjs/common": "^9.0.0",
     "@nestjs/core": "^9.0.0",
     "@nestjs/platform-express": "^9.0.0",
+    "@nestjs/typeorm": "^9.0.1",
+    "class-validator": "^0.13.2",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.0.0",
+    "sqlite3": "^5.1.2",
     "tslib": "^2.3.0"
   },
   "devDependencies": {

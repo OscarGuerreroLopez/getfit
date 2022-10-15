@@ -16,6 +16,7 @@
     "baseUrl": ".",
     "paths": {
       "@getfit/exercise": ["libs/exercise/src/index.ts"],
+      "@getfit/infra": ["libs/infra/src/index.ts"],
       "@getfit/user": ["libs/user/src/index.ts"]
     }
   },

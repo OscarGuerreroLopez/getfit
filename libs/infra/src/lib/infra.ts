@@ -9,3 +9,5 @@ export * from './common/filters/exception.fitler';
 export * from './logger/logger.module';
 export * from './logger/logger.service';
 export * from './common/bcrypt';
+export * from './exceptions/exceptions.module';
+export * from './exceptions/exceptions.service';

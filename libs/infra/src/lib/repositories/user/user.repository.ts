@@ -7,25 +7,24 @@ import {
   UserRepository as UserDomainRepository,
 } from '@getfit/user';
 import { UserEntity } from '../../entities/user.entity';
+import { ExceptionsService } from '../../exceptions/exceptions.service';
+import { LoggerService } from '../../logger/logger.service';
 
 @Injectable()
 export class UserRepository implements UserDomainRepository {
   constructor(
     @InjectRepository(UserEntity)
-    private readonly userEntityRepository: Repository<UserEntity>
+    private readonly userEntityRepository: Repository<UserEntity>,
+    private readonly exceptionService: ExceptionsService,
+    private readonly loggerService: LoggerService
   ) {}
 
   async getUserByUsername(username: string): Promise<UserModel> {
-    const userDetailEntity = await this.userEntityRepository.findOne({
+    const userDetailEntity = await this.userEntityRepository.findOneOrFail({
       where: { username },
     });
 
-    if (!userDetailEntity) {
-      console.error(`@@@user ${username} not found`);
-      throw new Error('@@@no user');
-    } else {
-      return this.toUserModel(userDetailEntity);
-    }
+    return this.toUserModel(userDetailEntity);
   }
 
   async insertUser(userModel: UserModel): Promise<UserModel> {
@@ -42,8 +41,13 @@ export class UserRepository implements UserDomainRepository {
     const userDetail: UserModel = new UserModel();
 
     if (!userDetailEntity.id) {
-      console.error('@@@missing user id');
-      throw new Error('@@@no userid');
+      this.loggerService.warn(
+        'toUser missing entity',
+        JSON.stringify(userDetailEntity)
+      );
+      this.exceptionService.internalServerErrorException({
+        message: 'Error converting user, check logs',
+      });
     }
 
     userDetail.id = userDetailEntity.id;

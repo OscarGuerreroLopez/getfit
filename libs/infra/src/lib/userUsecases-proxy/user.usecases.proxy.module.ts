@@ -4,9 +4,10 @@ import { UseCaseProxy } from './usecases-proxy';
 import { GetUserUseCase, AddUserUseCase } from '@getfit/user';
 import { LoggerModule } from '../logger/logger.module';
 import { LoggerService } from '../logger/logger.service';
+import { BcryptModule, BcryptService } from '../common/bcrypt';
 
 @Module({
-  imports: [UserRepositoryModule, LoggerModule],
+  imports: [UserRepositoryModule, LoggerModule, BcryptModule],
 })
 export class UserUseCasesProxyModule {
   static GET_USER_DETAIL_USECASES_PROXY = 'GetUserDetailUseCasesProxy';
@@ -23,10 +24,16 @@ export class UserUseCasesProxyModule {
             new UseCaseProxy(new GetUserUseCase(userRepository)),
         },
         {
-          inject: [UserRepository, LoggerService],
+          inject: [UserRepository, LoggerService, BcryptService],
           provide: UserUseCasesProxyModule.INSERT_USER_DETAIL_USECASES_PROXY,
-          useFactory: (userRepository: UserRepository, logger: LoggerService) =>
-            new UseCaseProxy(new AddUserUseCase(userRepository, logger)),
+          useFactory: (
+            userRepository: UserRepository,
+            logger: LoggerService,
+            bcrypt: BcryptService
+          ) =>
+            new UseCaseProxy(
+              new AddUserUseCase(userRepository, logger, bcrypt)
+            ),
         },
       ],
       exports: [

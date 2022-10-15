@@ -4,3 +4,4 @@ export function infra(): string {
 
 export * from '../lib/userUsecases-proxy/user.usecases.proxy.module';
 export * from '../lib/userUsecases-proxy/usecases-proxy';
+export * from '../lib/common/validations';

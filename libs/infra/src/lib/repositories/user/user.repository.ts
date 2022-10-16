@@ -25,9 +25,9 @@ export class UserRepository implements UserDomainRepository {
     });
 
     if (!userDetailEntity) {
+      this.loggerService.log('user not found', `user ${username}`);
       this.exceptionService.userNotFound({
-        message: `User ${username} not found`,
-        code_error: 404,
+        message: `User not found`,
       });
     }
 

@@ -6,7 +6,7 @@ import { IJwtService, IJwtServicePayload } from '@getfit/domain';
 export class JwtTokenService implements IJwtService {
   constructor(private readonly jwtService: JwtService) {}
 
-  async checkToken(token: string): Promise<any> {
+  async checkToken(token: string) {
     const decode = await this.jwtService.verifyAsync(token);
     return decode;
   }

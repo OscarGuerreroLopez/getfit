@@ -5,7 +5,7 @@
   "scripts": {
     "start": "nx serve",
     "build": "nx build",
-    "test": "nx test",
+    "test": "nx run-many --all --target=test",
     "serve:all": "NODE_ENV=local nx run-many --target=serve --projects=user,exercise --parallel",
     "build:all": "nx run-many --target=build --projects=user,exercise --parallel",
     "deploy:user": "nx deploy user",

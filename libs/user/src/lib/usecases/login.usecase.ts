@@ -39,7 +39,7 @@ export class LoginUseCases {
     );
     const payload: IJwtServicePayload = { username: username };
     const secret = this.jwtConfig.getJwtSecret();
-    const expiresIn = this.jwtConfig.getJwtExpirationTime() + 's';
+    const expiresIn = this.jwtConfig.getJwtExpirationTime() + 'h';
     const token = this.jwtTokenService.createToken(payload, secret, expiresIn);
     return { token };
   }

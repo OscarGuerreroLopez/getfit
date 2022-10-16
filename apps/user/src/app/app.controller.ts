@@ -5,8 +5,7 @@ import {
   Inject,
   Param,
   Post,
-  UseGuards,
-  Request,
+  HttpCode,
 } from '@nestjs/common';
 
 import { UserUseCasesProxyModule, UseCaseProxy } from '@getfit/infra';
@@ -50,7 +49,6 @@ export class AppController {
   }
 
   @Post('login')
-  // @UseGuards(LoginGuard)
   async login(@Body() auth: AddUserDto) {
     const accessToken = await this.loginUsecaseProxy
       .getInstance()
@@ -60,7 +58,7 @@ export class AppController {
   }
 
   @Post('auth')
-  // @UseGuards(LoginGuard)
+  @HttpCode(200)
   async auth(@Body() auth: AuthDto) {
     const accessToken = await this.checkTokenUsecaseProxy
       .getInstance()

@@ -10,9 +10,14 @@ export class CheckTokenUseCase {
   ) {}
 
   async checkToken(token: string) {
-    let decoded: { [key: string]: any } = {};
+    let decoded: { username: string; iat: number; exp: number } = {
+      username: '',
+      iat: 0,
+      exp: 0,
+    };
     try {
       decoded = await this.jwtTokenService.checkToken(token);
+      await this.checkuserExists(decoded.username);
     } catch (error) {
       if (error instanceof Error) {
         this.logger.warn(
@@ -32,5 +37,9 @@ export class CheckTokenUseCase {
     }
 
     return decoded;
+  }
+
+  private async checkuserExists(username: string) {
+    await this.userRepository.getUserByUsername(username);
   }
 }

@@ -9,7 +9,7 @@ services:
     ports:
       - '3334:3334'
     depends_on:
-      - sqlite3
+      - user
   user:
     image: user
     environment:

@@ -10,6 +10,8 @@ services:
       - '3334:3334'
     depends_on:
       - sqlite3
+    volumes:
+      - ./db/user:/app/user
   user:
     image: user
     environment:
@@ -20,10 +22,11 @@ services:
       - '3333:3333'
     depends_on:
       - sqlite3
-
+    volumes:
+      - ./db/user:/app/user
   sqlite3:
     image: nouchka/sqlite3:latest
     stdin_open: true
     tty: true
     volumes:
-      - "./local-db:/go/src/beginnerapp/local-db"
+      - ./db/user:/app/user

@@ -1,94 +1,88 @@
-
-
 # Getfit
 
-This project was generated using [Nx](https://nx.dev).
+## Important note
+I left the env on purpose, I would never do that in a normal scenario but just for this test and for you to be able to run it I did not include it in .gitignore!!!!!
 
-<p style="text-align: center;"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="450"></p>
+## Description
+This is just a simple test where I used a monorepo trying to mimic two microservices that can be deployed individually. Tried to follow the clean architecture features where the domain (entities and use-cases) are separated from the implementation and the framework. All the dependencies are injected, respecting the dependency inversion principle and SOLID. 
 
-🔎 **Smart, Fast and Extensible Build System**
+## Structure
+In this monorepo we have two applications, one that handles the user and authentication and the other that handles the exercise business context. 
+#### App
+The app part handles the routing of the requests. Directs the request to the appropriate use case to handle it 
 
-## Adding capabilities to your workspace
+#### Libs
+In this section we have the domain for user, exercise and the general domain shared by all the entities. 
 
-Nx supports many plugins which add capabilities for developing different types of applications and different tools.
+* Domain\
+Domain has the business rules for the handling of the JWTs, exceptions, Logger, etc... used through the application
 
-These capabilities include generating applications, libraries, etc as well as the devtools to test, and build projects as well.
+* User\
+User has all the entities and use cases related to the user context, including adding users, login, authorization etc.....
 
-Below are our core plugins:
+* Exercise\
+Exercises contains all the entities and business rules for the exercises
 
-- [React](https://reactjs.org)
-  - `npm install --save-dev @nrwl/react`
-- Web (no framework frontends)
-  - `npm install --save-dev @nrwl/web`
-- [Angular](https://angular.io)
-  - `npm install --save-dev @nrwl/angular`
-- [Nest](https://nestjs.com)
-  - `npm install --save-dev @nrwl/nest`
-- [Express](https://expressjs.com)
-  - `npm install --save-dev @nrwl/express`
-- [Node](https://nodejs.org)
-  - `npm install --save-dev @nrwl/node`
+* Infra\
+This lib contains all the technical details, configuration, implementations (database, filters, jwt, logger, exceptions implementations, etc...)
+The most interesting part is the Module Usecases proxy. this module is the link between the use cases and the infrastructure, services are injected into the use cases. In this way, it will be easy to change services in the future and we respect the dependency injection (SOLID)
 
-There are also many [community plugins](https://nx.dev/community) you could add.
 
-## Generate an application
-
-Run `nx g @nrwl/react:app my-app` to generate an application.
-
-> You can use any of the plugins above to generate applications as well.
-
-When using Nx, you can create multiple applications and libraries in the same workspace.
-
-## Generate a library
-
-Run `nx g @nrwl/react:lib my-lib` to generate a library.
-
-> You can also use any of the plugins above to generate libraries as well.
-
-Libraries are shareable across libraries and applications. They can be imported from `@getfit/mylib`.
-
-## Development server
-
-Run `nx serve my-app` for a dev server. Navigate to http://localhost:4200/. The app will automatically reload if you change any of the source files.
-
-## Code scaffolding
-
-Run `nx g @nrwl/react:component my-component --project=my-app` to generate a new component.
-
-## Build
-
-Run `nx build my-app` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
-
-## Running unit tests
-
-Run `nx test my-app` to execute the unit tests via [Jest](https://jestjs.io).
-
-Run `nx affected:test` to execute the unit tests affected by a change.
-
-## Running end-to-end tests
-
-Run `nx e2e my-app` to execute the end-to-end tests via [Cypress](https://www.cypress.io).
-
-Run `nx affected:e2e` to execute the end-to-end tests affected by a change.
-
-## Understand your workspace
-
-Run `nx graph` to see a diagram of the dependencies of your projects.
-
-## Further help
-
-Visit the [Nx Documentation](https://nx.dev) to learn more.
+### Running it locally
+```sh
+npm install
+npm run serve_all
+```
 
 
 
-## ☁ Nx Cloud
+### Running it with docker
+```sh
+npm install
+npm run deploy:user    
+npm run deploy:exercise
+docker-compose --env-file .local.env  up -d 
+```
 
-### Distributed Computation Caching & Distributed Task Execution
 
-<p style="text-align: center;"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-cloud-card.png"></p>
+### Endpoints
+. add user\
+```
+curl --location --request POST 'http://localhost:3333/user' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "username": "pepito",
+    "password": "Abc123"
+}'
 
-Nx Cloud pairs with Nx in order to enable you to build and test code more rapidly, by up to 10 times. Even teams that are new to Nx can connect to Nx Cloud and start saving time instantly.
+```
+. get login token
 
-Teams using Nx gain the advantage of building full-stack applications with their preferred framework alongside Nx’s advanced code generation and project dependency graph, plus a unified experience for both frontend and backend developers.
+```
+curl --location --request POST 'http://localhost:3333/user/login' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "username": "pepito",
+    "password": "Abc123"
+}'
+````
 
-Visit [Nx Cloud](https://nx.app/) to learn more.
+. add exercise
+```
+curl --location --request POST 'http://localhost:3334/exercise/' \
+--header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBlcGl0byIsImlhdCI6MTY2NTkzODA2MCwiZXhwIjoxNjY2NTQyODYwfQ.65yq6we7-4nakYoLDJ8y4DHiuTm_5RwynGDLDRsWJS8' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "content": "Abc123"
+}'
+```
+
+. get exercises
+```
+curl --location --request GET 'http://localhost:3334/exercise/' \
+--header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBlcGl0byIsImlhdCI6MTY2NTkzODA2MCwiZXhwIjoxNjY2NTQyODYwfQ.65yq6we7-4nakYoLDJ8y4DHiuTm_5RwynGDLDRsWJS8'
+```
+
+#### DB
+I used sqlite for simplicity, in the repo there is some persistance of the data in the collection user, on the root folder, so the curls above should work. I tried to mimic a microservice env where each service has its own DB, thats why there is no relations between tables. I could have used a one-to-many relationship between user and exercises and thus get the name of the user for each exercise, but decided to treat it as single databases...... 
+

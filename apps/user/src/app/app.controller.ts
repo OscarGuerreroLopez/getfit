@@ -5,14 +5,19 @@ import {
   Inject,
   Param,
   Post,
-  UseGuards,
-  Request,
+  HttpCode,
 } from '@nestjs/common';
 
 import { UserUseCasesProxyModule, UseCaseProxy } from '@getfit/infra';
 import { AddUserDto } from './addUser.dto';
-import { AddUserUseCase, GetUserUseCase, LoginUseCases } from '@getfit/user';
+import {
+  AddUserUseCase,
+  GetUserUseCase,
+  LoginUseCases,
+  CheckTokenUseCase,
+} from '@getfit/user';
 import { UserPresenter } from './user.presenter';
+import { AuthDto } from './auth.dto';
 
 @Controller()
 export class AppController {
@@ -22,7 +27,9 @@ export class AppController {
     @Inject(UserUseCasesProxyModule.GET_USER_DETAIL_USECASES_PROXY)
     private readonly getUserDetail: UseCaseProxy<GetUserUseCase>,
     @Inject(UserUseCasesProxyModule.LOGIN_USECASES_PROXY)
-    private readonly loginUsecaseProxy: UseCaseProxy<LoginUseCases>
+    private readonly loginUsecaseProxy: UseCaseProxy<LoginUseCases>,
+    @Inject(UserUseCasesProxyModule.CHECK_TOKEN_USECASES_PROXY)
+    private readonly checkTokenUsecaseProxy: UseCaseProxy<CheckTokenUseCase>
   ) {}
 
   @Get(':username')
@@ -42,11 +49,20 @@ export class AppController {
   }
 
   @Post('login')
-  // @UseGuards(LoginGuard)
   async login(@Body() auth: AddUserDto) {
     const accessToken = await this.loginUsecaseProxy
       .getInstance()
       .validateUser(auth.username, auth.password);
+
+    return accessToken;
+  }
+
+  @Post('auth')
+  @HttpCode(200)
+  async auth(@Body() auth: AuthDto) {
+    const accessToken = await this.checkTokenUsecaseProxy
+      .getInstance()
+      .checkToken(auth.token);
 
     return accessToken;
   }

@@ -25,9 +25,9 @@ export class UserRepository implements UserDomainRepository {
     });
 
     if (!userDetailEntity) {
+      this.loggerService.log('user not found', `user ${username}`);
       this.exceptionService.userNotFound({
-        message: `User ${username} not found`,
-        code_error: 404,
+        message: `User not found`,
       });
     }
 
@@ -35,7 +35,7 @@ export class UserRepository implements UserDomainRepository {
   }
 
   async insertUser(userModel: UserModel): Promise<UserModel> {
-    const userDetailEntity: UserEntity = this.toUserEntity(userModel);
+    const userDetailEntity = this.toUserEntity(userModel);
 
     const result = await this.userEntityRepository.save(userDetailEntity);
 

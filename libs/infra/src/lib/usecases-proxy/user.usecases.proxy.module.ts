@@ -1,7 +1,12 @@
 import { DynamicModule, Module } from '@nestjs/common';
 import { UserRepositoryModule, UserRepository } from '../repositories/user';
 import { UseCaseProxy } from './usecases-proxy';
-import { GetUserUseCase, AddUserUseCase, LoginUseCases } from '@getfit/user';
+import {
+  GetUserUseCase,
+  AddUserUseCase,
+  LoginUseCases,
+  CheckTokenUseCase,
+} from '@getfit/user';
 import { LoggerModule } from '../logger/logger.module';
 import { LoggerService } from '../logger/logger.service';
 import { BcryptModule, BcryptService } from '../common/bcrypt';
@@ -26,6 +31,7 @@ export class UserUseCasesProxyModule {
   static GET_USER_DETAIL_USECASES_PROXY = 'GetUserDetailUseCasesProxy';
   static INSERT_USER_DETAIL_USECASES_PROXY = 'InsertUserDetailUseCasesProxy';
   static LOGIN_USECASES_PROXY = 'LoginUseCasesProxy';
+  static CHECK_TOKEN_USECASES_PROXY = 'CheckTokenUseCasesProxy';
 
   static register(): DynamicModule {
     return {
@@ -78,11 +84,35 @@ export class UserUseCasesProxyModule {
               )
             ),
         },
+        {
+          inject: [
+            LoggerService,
+            JwtTokenService,
+            UserRepository,
+            ExceptionsService,
+          ],
+          provide: UserUseCasesProxyModule.CHECK_TOKEN_USECASES_PROXY,
+          useFactory: (
+            logger: LoggerService,
+            jwtTokenService: JwtTokenService,
+            userRepo: UserRepository,
+            exceptionsService: ExceptionsService
+          ) =>
+            new UseCaseProxy(
+              new CheckTokenUseCase(
+                logger,
+                jwtTokenService,
+                userRepo,
+                exceptionsService
+              )
+            ),
+        },
       ],
       exports: [
         UserUseCasesProxyModule.GET_USER_DETAIL_USECASES_PROXY,
         UserUseCasesProxyModule.INSERT_USER_DETAIL_USECASES_PROXY,
         UserUseCasesProxyModule.LOGIN_USECASES_PROXY,
+        UserUseCasesProxyModule.CHECK_TOKEN_USECASES_PROXY,
       ],
     };
   }

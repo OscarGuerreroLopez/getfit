@@ -5,7 +5,7 @@ import {
   JWTConfig,
   ILogger,
 } from '@getfit/domain';
-import { UserRepository } from '@getfit/user';
+import { UserRepository } from '../entities/repositories';
 import { ExceptionsService } from '@getfit/infra';
 
 export class LoginUseCases {
@@ -31,7 +31,6 @@ export class LoginUseCases {
       );
       this.exceptionService.UnauthorizedException({
         message: 'Something went wrong, check logs',
-        code_error: 401,
       });
     }
     this.logger.log(
@@ -40,7 +39,7 @@ export class LoginUseCases {
     );
     const payload: IJwtServicePayload = { username: username };
     const secret = this.jwtConfig.getJwtSecret();
-    const expiresIn = this.jwtConfig.getJwtExpirationTime() + 's';
+    const expiresIn = this.jwtConfig.getJwtExpirationTime() + 'h';
     const token = this.jwtTokenService.createToken(payload, secret, expiresIn);
     return { token };
   }

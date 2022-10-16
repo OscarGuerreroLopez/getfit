@@ -11,7 +11,7 @@ describe('JwtService', () => {
       imports: [
         Jwt.register({
           secret: 'xgfht543',
-          signOptions: { expiresIn: '24h' },
+          signOptions: { expiresIn: '168h' },
         }),
       ],
       providers: [JwtTokenService],

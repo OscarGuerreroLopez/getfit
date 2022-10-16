@@ -86,3 +86,5 @@ curl --location --request GET 'http://localhost:3334/exercise/' \
 #### DB
 I used sqlite for simplicity, in the repo there is some persistance of the data in the collection user, on the root folder, so the curls above should work. I tried to mimic a microservice env where each service has its own DB, thats why there is no relations between tables. I could have used a one-to-many relationship between user and exercises and thus get the name of the user for each exercise, but decided to treat it as single databases...... 
 
+#### Unit test
+I wished I could have more time to add more test, but unfortunely I don't have much time, if required I can try 

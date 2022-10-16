@@ -35,7 +35,7 @@ export class UserRepository implements UserDomainRepository {
   }
 
   async insertUser(userModel: UserModel): Promise<UserModel> {
-    const userDetailEntity: UserEntity = this.toUserEntity(userModel);
+    const userDetailEntity = this.toUserEntity(userModel);
 
     const result = await this.userEntityRepository.save(userDetailEntity);
 

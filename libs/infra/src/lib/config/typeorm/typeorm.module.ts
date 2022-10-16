@@ -9,7 +9,7 @@ export const getTypeOrmModuleOptions = (): TypeOrmModuleOptions =>
     database: 'user',
     entities: [UserEntity, ExerciseEntity],
     synchronize: true,
-    logging: false,
+    logging: true,
   } as TypeOrmModuleOptions);
 
 @Module({

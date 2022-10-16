@@ -2,15 +2,11 @@ import { Module } from '@nestjs/common';
 
 import { AppController } from './app.controller';
 
-import {
-  UserUseCasesProxyModule,
-  EnvironmentConfigModule,
-  EnvironmentConfigService,
-} from '@getfit/infra';
+import { UserUseCasesProxyModule } from '@getfit/infra';
 
 @Module({
-  imports: [UserUseCasesProxyModule.register(), EnvironmentConfigModule],
+  imports: [UserUseCasesProxyModule.register()],
   controllers: [AppController],
-  providers: [EnvironmentConfigService],
+  providers: [],
 })
 export class AppModule {}

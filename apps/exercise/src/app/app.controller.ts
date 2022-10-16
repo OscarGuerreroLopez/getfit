@@ -5,7 +5,7 @@ import {
   UseCaseProxy,
   UserUseCasesProxyModule,
 } from '@getfit/infra';
-import { AddExerciseUseCase } from '@getfit/exercise';
+import { AddExerciseUseCase, GetExercisesUseCase } from '@getfit/exercise';
 import { AddExerciseDto } from './addExercise.dto';
 import { CheckTokenUseCase } from '@getfit/user';
 import { ExercisePresenter } from './exercise.presenter';
@@ -13,10 +13,27 @@ import { ExercisePresenter } from './exercise.presenter';
 export class AppController {
   constructor(
     @Inject(ExerciseUseCasesProxyModule.ADD_EXERCISES_DETAIL_USECASES_PROXY)
-    private readonly addUExerciseDetail: UseCaseProxy<AddExerciseUseCase>,
+    private readonly addExerciseDetail: UseCaseProxy<AddExerciseUseCase>,
+    @Inject(ExerciseUseCasesProxyModule.GET_EXERCISES_DETAIL_USECASES_PROXY)
+    private readonly getExercisesDetail: UseCaseProxy<GetExercisesUseCase>,
     @Inject(UserUseCasesProxyModule.CHECK_TOKEN_USECASES_PROXY)
     private readonly checkTokenUsecaseProxy: UseCaseProxy<CheckTokenUseCase>
   ) {}
+
+  @Get()
+  async getExercises(@Request() req: RequestExpress) {
+    const authToken = req.headers.authorization.split(' ');
+
+    const getUser = await this.checkTokenUsecaseProxy
+      .getInstance()
+      .checkToken(authToken[1]);
+
+    const getExercises = await this.getExercisesDetail
+      .getInstance()
+      .execute(getUser.userId, getUser.username);
+
+    return getExercises;
+  }
 
   @Post()
   async addExercise(
@@ -29,7 +46,7 @@ export class AppController {
       .getInstance()
       .checkToken(authToken[1]);
 
-    const exerciseCreated = await this.addUExerciseDetail
+    const exerciseCreated = await this.addExerciseDetail
       .getInstance()
       .execute(getUser.userId, exerciseDto.content);
 

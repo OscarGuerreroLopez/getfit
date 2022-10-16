@@ -2,8 +2,6 @@ import { Module } from '@nestjs/common';
 import {
   ExerciseUseCasesProxyModule,
   UserUseCasesProxyModule,
-  EnvironmentConfigModule,
-  EnvironmentConfigService,
 } from '@getfit/infra';
 import { AppController } from './app.controller';
 
@@ -11,9 +9,8 @@ import { AppController } from './app.controller';
   imports: [
     ExerciseUseCasesProxyModule.register(),
     UserUseCasesProxyModule.register(),
-    EnvironmentConfigModule,
   ],
   controllers: [AppController],
-  providers: [EnvironmentConfigService],
+  providers: [],
 })
 export class AppModule {}

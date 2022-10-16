@@ -5,7 +5,7 @@ import {
   ExerciseRepositoryService,
 } from '../repositories/exercise';
 import { UseCaseProxy } from './usecases-proxy';
-import { AddExerciseUseCase } from '@getfit/exercise';
+import { AddExerciseUseCase, GetExercisesUseCase } from '@getfit/exercise';
 
 import { LoggerModule } from '../logger/logger.module';
 import { LoggerService } from '../logger/logger.service';
@@ -16,8 +16,8 @@ import { ExceptionsModule } from '../exceptions/exceptions.module';
   imports: [ExerciseRepositoryModule, LoggerModule, ExceptionsModule],
 })
 export class ExerciseUseCasesProxyModule {
-  // static GET_EXERCISES_DETAIL_USECASES_PROXY =
-  //   'GetExercisesDetailUseCasesProxy';
+  static GET_EXERCISES_DETAIL_USECASES_PROXY =
+    'GetExercisesDetailUseCasesProxy';
   static ADD_EXERCISES_DETAIL_USECASES_PROXY =
     'AddExercisesDetailUseCasesProxy';
 
@@ -42,10 +42,17 @@ export class ExerciseUseCasesProxyModule {
               )
             ),
         },
+        {
+          inject: [ExerciseRepositoryService],
+          provide:
+            ExerciseUseCasesProxyModule.GET_EXERCISES_DETAIL_USECASES_PROXY,
+          useFactory: (exerciseRepository: ExerciseRepositoryService) =>
+            new UseCaseProxy(new GetExercisesUseCase(exerciseRepository)),
+        },
       ],
       exports: [
         ExerciseUseCasesProxyModule.ADD_EXERCISES_DETAIL_USECASES_PROXY,
-        // ExerciseUseCasesProxyModule.GET_EXERCISES_DETAIL_USECASES_PROXY,
+        ExerciseUseCasesProxyModule.GET_EXERCISES_DETAIL_USECASES_PROXY,
       ],
     };
   }

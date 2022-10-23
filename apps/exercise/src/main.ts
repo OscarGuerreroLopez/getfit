@@ -25,7 +25,7 @@ async function bootstrap() {
   // Filter
   app.useGlobalFilters(new AllExceptionFilter(new LoggerService()));
   app.setGlobalPrefix(globalPrefix);
-  const port = process.env.PORT || 3334;
+  const port = process.env.EXERCISE_PORT;
   await app.listen(port);
   Logger.log(
     `🚀 Application is running on: http://localhost:${port}/${globalPrefix}`

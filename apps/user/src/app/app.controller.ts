@@ -6,9 +6,14 @@ import {
   Param,
   Post,
   HttpCode,
+  UseGuards,
 } from '@nestjs/common';
 
-import { UserUseCasesProxyModule, UseCaseProxy } from '@getfit/infra';
+import {
+  UserUseCasesProxyModule,
+  UseCaseProxy,
+  GetUserGuard,
+} from '@getfit/infra';
 import { AddUserDto } from './addUser.dto';
 import {
   AddUserUseCase,
@@ -18,6 +23,7 @@ import {
 } from '@getfit/user';
 import { UserPresenter } from './user.presenter';
 import { AuthDto } from './auth.dto';
+import { LoginDto } from './login.dto';
 
 @Controller()
 export class AppController {
@@ -33,6 +39,7 @@ export class AppController {
   ) {}
 
   @Get(':username')
+  @UseGuards(GetUserGuard)
   async getData(@Param('username') username: string) {
     const result = await this.getUserDetail.getInstance().execute(username);
 
@@ -49,7 +56,7 @@ export class AppController {
   }
 
   @Post('login')
-  async login(@Body() auth: AddUserDto) {
+  async login(@Body() auth: LoginDto) {
     const accessToken = await this.loginUsecaseProxy
       .getInstance()
       .validateUser(auth.username, auth.password);

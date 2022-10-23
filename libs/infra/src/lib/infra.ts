@@ -14,3 +14,6 @@ export * from './exceptions/exceptions.module';
 export * from './exceptions/exceptions.service';
 export * from './config/environment-config/environment-config.module';
 export * from './config/environment-config/environment-config.service';
+export * from './common/guards';
+export * from './common/jwt/jwt.module';
+export * from './common/jwt/jwt.service';

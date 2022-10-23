@@ -18,6 +18,7 @@ export class CheckTokenUseCase {
       result = {
         userId: user.id,
         username: user.username,
+        role: user.role,
       };
     } catch (error) {
       if (error instanceof Error) {

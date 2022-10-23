@@ -40,11 +40,11 @@ export class AppController {
     @Body() exerciseDto: AddExerciseDto,
     @Request() req: RequestExpress
   ) {
-    const authToken = req.headers.authorization.split(' ');
+    const authToken = req.headers.authorization.split(' ')[1];
 
     const getUser = await this.checkTokenUsecaseProxy
       .getInstance()
-      .checkToken(authToken[1]);
+      .checkToken(authToken);
 
     const exerciseCreated = await this.addExerciseDetail
       .getInstance()

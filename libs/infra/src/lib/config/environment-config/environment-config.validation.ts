@@ -22,6 +22,16 @@ class EnvironmentVariables {
   USER_PORT!: number;
   @IsNumber()
   EXERCISE_PORT!: number;
+  @IsString()
+  USER_LOCAL_URL!: string;
+  @IsString()
+  EXERCISE_LOCAL_URL!: string;
+  @IsString()
+  USER_DOCKER_URL!: string;
+  @IsString()
+  EXERCISE_DOCKER_URL!: string;
+  @IsString()
+  API_KEY!: string;
 }
 
 export function validate(config: Record<string, unknown>) {

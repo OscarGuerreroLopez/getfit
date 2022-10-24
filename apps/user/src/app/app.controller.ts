@@ -6,7 +6,9 @@ import {
   Param,
   Post,
   HttpCode,
+  Request,
 } from '@nestjs/common';
+import { Request as ExpressRequest } from 'express';
 
 import { UserUseCasesProxyModule, UseCaseProxy } from '@getfit/infra';
 import { AddUserDto } from './addUser.dto';
@@ -33,7 +35,15 @@ export class AppController {
   ) {}
 
   @Get(':username')
-  async getData(@Param('username') username: string) {
+  async getData(
+    @Param('username') username: string,
+    @Request() req: ExpressRequest
+  ) {
+    console.log('@@@888', req.headers['api-key']);
+    if (req.headers['user']) {
+      console.log('@@@999', JSON.parse(req.headers['user'] as string));
+    }
+
     const result = await this.getUserDetail.getInstance().execute(username);
 
     return new UserPresenter(result);

@@ -6,11 +6,7 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { LoggerService } from '../../logger/logger.service';
-
-interface IError {
-  message: string;
-  code_error: string | null;
-}
+import { IFormatExceptionMessage } from '@getfit/domain';
 
 @Catch()
 export class AllExceptionFilter implements ExceptionFilter {
@@ -26,8 +22,8 @@ export class AllExceptionFilter implements ExceptionFilter {
         : HttpStatus.INTERNAL_SERVER_ERROR;
     const message =
       exception instanceof HttpException
-        ? (exception.getResponse() as IError)
-        : { message: 'check logs', code_error: null };
+        ? (exception.getResponse() as IFormatExceptionMessage)
+        : { message: 'check logs', code_error: undefined };
 
     const responseData = {
       ...{
@@ -45,7 +41,7 @@ export class AllExceptionFilter implements ExceptionFilter {
 
   private logMessage(
     request: any,
-    message: IError,
+    message: IFormatExceptionMessage,
     status: number,
     exception: any
   ) {

@@ -1,6 +1,6 @@
 import { UserModel, UserModelWithoutPassword } from '../model';
 
-export interface UserRepository {
-  getUserByUsername(username: string): Promise<UserModel>;
+export interface IUserRepository {
+  getUserByUsername(username: string): Promise<UserModel | null>;
   insertUser(user: UserModel): Promise<UserModelWithoutPassword>;
 }

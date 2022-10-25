@@ -10,19 +10,19 @@ import { IException, IFormatExceptionMessage } from '@getfit/domain';
 
 @Injectable()
 export class ExceptionsService implements IException {
-  badRequestException(data: IFormatExceptionMessage): void {
-    throw new BadRequestException(data);
+  badRequestException(data: IFormatExceptionMessage) {
+    return new BadRequestException(data);
   }
-  internalServerErrorException(data?: IFormatExceptionMessage): void {
-    throw new InternalServerErrorException(data);
+  internalServerErrorException(data?: IFormatExceptionMessage) {
+    return new InternalServerErrorException(data);
   }
-  forbiddenException(data?: IFormatExceptionMessage): void {
-    throw new ForbiddenException(data);
+  forbiddenException(data?: IFormatExceptionMessage) {
+    return new ForbiddenException(data);
   }
-  userNotFound(data?: IFormatExceptionMessage): void {
-    throw new NotFoundException(data);
+  userNotFound(data?: IFormatExceptionMessage) {
+    return new NotFoundException(data);
   }
-  UnauthorizedException(data?: IFormatExceptionMessage): void {
-    throw new UnauthorizedException(data);
+  UnauthorizedException(data?: IFormatExceptionMessage) {
+    return new UnauthorizedException(data);
   }
 }

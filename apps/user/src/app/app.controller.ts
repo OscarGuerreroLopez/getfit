@@ -39,6 +39,7 @@ export class AppController {
     @Param('username') username: string,
     @Request() req: ExpressRequest
   ) {
+    console.log('@@@777', req.headers['request-code']);
     console.log('@@@888', req.headers['api-key']);
     if (req.headers['user']) {
       console.log('@@@999', JSON.parse(req.headers['user'] as string));

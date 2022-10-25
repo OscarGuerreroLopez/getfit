@@ -9,9 +9,6 @@ export class AppService {
     @Inject(UserUseCasesProxyModule.CHECK_TOKEN_USECASES_PROXY)
     private readonly checkTokenUsecaseProxy: UseCaseProxy<CheckTokenUseCase>
   ) {}
-  getData(): { message: string } {
-    return { message: 'Welcome to orch!' };
-  }
 
   async checkToken(token: string) {
     return await this.checkTokenUsecaseProxy.getInstance().checkToken(token);

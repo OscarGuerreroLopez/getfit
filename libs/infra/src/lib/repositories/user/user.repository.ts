@@ -2,16 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import {
-  UserModel,
-  UserRepository as UserDomainRepository,
-} from '@getfit/user';
+import { UserModel, IUserRepository } from '@getfit/user';
 import { UserEntity } from '../../entities/user.entity';
 import { ExceptionsService } from '../../exceptions/exceptions.service';
 import { LoggerService } from '../../logger/logger.service';
 
 @Injectable()
-export class UserRepository implements UserDomainRepository {
+export class UserRepository implements IUserRepository {
   constructor(
     @InjectRepository(UserEntity)
     private readonly userEntityRepository: Repository<UserEntity>,
@@ -19,19 +16,18 @@ export class UserRepository implements UserDomainRepository {
     private readonly loggerService: LoggerService
   ) {}
 
-  async getUserByUsername(username: string): Promise<UserModel> {
+  async getUserByUsername(username: string): Promise<UserModel | null> {
     const userDetailEntity = await this.userEntityRepository.findOne({
       where: { username },
     });
 
     if (!userDetailEntity) {
-      this.loggerService.log('user not found', `user ${username}`);
-      this.exceptionService.userNotFound({
-        message: `User not found`,
-      });
+      return null;
     }
 
-    return this.toUserModel(userDetailEntity as UserEntity);
+    const resultUser = this.toUserModel(userDetailEntity);
+
+    return resultUser;
   }
 
   async insertUser(userModel: UserModel): Promise<UserModel> {
@@ -45,15 +41,6 @@ export class UserRepository implements UserDomainRepository {
   }
 
   private toUserModel(userDetailEntity: UserEntity): UserModel {
-    if (!userDetailEntity?.id) {
-      this.loggerService.warn(
-        'toUser missing entity',
-        JSON.stringify(userDetailEntity)
-      );
-      this.exceptionService.internalServerErrorException({
-        message: 'Error converting user, check logs',
-      });
-    }
     const userDetail: UserModel = new UserModel();
     userDetail.id = userDetailEntity.id;
     userDetail.username = userDetailEntity.username;

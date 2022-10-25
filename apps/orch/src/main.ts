@@ -14,6 +14,7 @@ import { createProxyMiddleware } from 'http-proxy-middleware';
 import { AppService } from './app/app.service';
 import { AllExceptionFilter, LoggerService } from '@getfit/infra';
 import { Request, Response, NextFunction } from 'express';
+import { v4 as uuidv4 } from 'uuid';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -35,7 +36,6 @@ async function bootstrap() {
       const authToken = req.headers.authorization?.split(' ')[1];
       if (authToken) {
         const user = await appService.checkToken(authToken);
-        console.log('@@@777', user);
 
         req.headers['user'] = JSON.stringify(user);
       }
@@ -55,6 +55,8 @@ async function bootstrap() {
       changeOrigin: true,
       onProxyReq: async (clientRequest, req, res) => {
         try {
+          const uuid = uuidv4();
+          clientRequest.setHeader('request-code', uuid);
           clientRequest.setHeader('api-key', process.env.API_KEY);
           clientRequest.removeHeader('authorization');
         } catch (error) {

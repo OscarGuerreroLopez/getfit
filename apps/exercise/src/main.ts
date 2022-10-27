@@ -7,6 +7,7 @@ import {
   LoggerService,
   ApiGuardGuard,
   EnvironmentConfigService,
+  UserExerciseGuard,
 } from '@getfit/infra';
 import { AppModule } from './app/app.module';
 
@@ -30,6 +31,9 @@ async function bootstrap() {
       new EnvironmentConfigService(new ConfigService())
     )
   );
+
+  // user guard
+  app.useGlobalGuards(new UserExerciseGuard(new LoggerService()));
 
   app.setGlobalPrefix(globalPrefix);
   const port = process.env.EXERCISE_PORT;

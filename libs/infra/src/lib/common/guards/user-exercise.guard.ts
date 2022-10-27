@@ -1,14 +1,10 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Observable } from 'rxjs';
-import { EnvironmentConfigService } from '../../config/environment-config/environment-config.service';
 import { LoggerService } from '../../logger/logger.service';
 
 @Injectable()
 export class UserExerciseGuard implements CanActivate {
-  constructor(
-    private readonly logger: LoggerService,
-    private environmentConfigService: EnvironmentConfigService
-  ) {}
+  constructor(private readonly logger: LoggerService) {}
   canActivate(
     context: ExecutionContext
   ): boolean | Promise<boolean> | Observable<boolean> {

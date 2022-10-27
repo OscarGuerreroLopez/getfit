@@ -13,7 +13,7 @@ import {
   UseCaseProxy,
   ExceptionsService,
   LoggerService,
-  ApiGuardGuard,
+  UserExerciseGuard,
 } from '@getfit/infra';
 import { AddExerciseUseCase, GetExercisesUseCase } from '@getfit/exercise';
 import { AddExerciseDto } from './addExercise.dto';
@@ -31,7 +31,6 @@ export class AppController {
   ) {}
 
   @Get()
-  @UseGuards(ApiGuardGuard)
   async getExercises(@Request() req: RequestExpress) {
     const user = req.headers['user'] as string;
 
@@ -56,7 +55,6 @@ export class AppController {
   }
 
   @Post()
-  @UseGuards(ApiGuardGuard)
   async addExercise(
     @Body() exerciseDto: AddExerciseDto,
     @Request() req: RequestExpress

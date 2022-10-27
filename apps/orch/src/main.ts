@@ -66,6 +66,24 @@ async function bootstrap() {
     })
   );
 
+  app.use(
+    '/exercise',
+    createProxyMiddleware({
+      target: process.env.EXERCISE_LOCAL_URL,
+      changeOrigin: true,
+      onProxyReq: async (clientRequest, req, res) => {
+        try {
+          const uuid = uuidv4();
+          clientRequest.setHeader('request-code', uuid);
+          clientRequest.setHeader('api-key', process.env.API_KEY);
+          clientRequest.removeHeader('authorization');
+        } catch (error) {
+          res.status(error.status || 500).send(error);
+        }
+      },
+    })
+  );
+
   const port = process.env.ORCH_PORT;
   await app.listen(port);
   Logger.log(`🚀 Application is running on: http://localhost:${port}`);

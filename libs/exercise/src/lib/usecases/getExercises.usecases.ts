@@ -9,7 +9,11 @@ export class GetExercisesUseCase {
     private readonly exception: IException
   ) {}
 
-  async execute(userId: number, username: string): Promise<ExerciseModel[]> {
+  async execute(
+    userId: number,
+    username: string,
+    request_code = '0'
+  ): Promise<ExerciseModel[]> {
     try {
       const result = await this.exerciseRepository.getExercises(userId);
 
@@ -20,7 +24,10 @@ export class GetExercisesUseCase {
 
       return response;
     } catch (error) {
-      this.logger.warn('AddUExerciseUseCase', JSON.stringify(error));
+      this.logger.warn(
+        'AddUExerciseUseCase',
+        `${JSON.stringify(error)} request-code=${request_code}`
+      );
       throw this.exception.badRequestException({
         message: 'Error adding the exercise, check logs',
         code_error: 400,

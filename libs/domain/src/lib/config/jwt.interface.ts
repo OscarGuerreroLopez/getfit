@@ -1,4 +1,4 @@
-export interface JWTConfig {
+export interface IJWTConfig {
   getJwtSecret(): string;
   getJwtExpirationTime(): string;
   getNodeEnv(): string;

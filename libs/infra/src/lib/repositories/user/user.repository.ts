@@ -45,6 +45,7 @@ export class UserRepository implements IUserRepository {
     userDetail.id = userDetailEntity.id;
     userDetail.username = userDetailEntity.username;
     userDetail.password = userDetailEntity.password;
+    userDetail.role = userDetailEntity.role;
 
     return userDetail;
   }
@@ -55,6 +56,7 @@ export class UserRepository implements IUserRepository {
     userDetail.id = userModel.id;
     userDetail.username = userModel.username;
     userDetail.password = userModel.password;
+    userDetail.role = userModel.role;
 
     return userDetail;
   }

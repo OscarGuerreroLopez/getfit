@@ -10,7 +10,10 @@ export class GetUserUseCase {
     private readonly logger: ILogger
   ) {}
 
-  async execute(userName: string): Promise<UserModelWithoutPassword> {
+  async execute(
+    userName: string,
+    request_code = '0'
+  ): Promise<UserModelWithoutPassword> {
     try {
       const user = await this.userRepository.getUserByUsername(userName);
       if (!user) {
@@ -19,7 +22,10 @@ export class GetUserUseCase {
 
       return user;
     } catch (error) {
-      this.logger.warn('GetUserUseCase', JSON.stringify(error));
+      this.logger.warn(
+        'GetUserUseCase',
+        `${JSON.stringify(error)} request-code=${request_code}`
+      );
       throw this.exceptionService.userNotFound({
         message: 'Error getting the user, check logs',
         code_error: 404,

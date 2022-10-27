@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { JWTConfig } from '@getfit/domain';
+import { IJWTConfig } from '@getfit/domain';
 
 @Injectable()
-export class EnvironmentConfigService implements JWTConfig {
+export class EnvironmentConfigService implements IJWTConfig {
   constructor(private configService: ConfigService) {}
 
   getJwtSecret(): string {

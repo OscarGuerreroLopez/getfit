@@ -9,7 +9,7 @@ export class CheckTokenUseCase {
     private readonly exceptionService: IException
   ) {}
 
-  async checkToken(token: string) {
+  async execute(token: string, request_code = '0') {
     try {
       const decoded = await this.jwtTokenService.checkToken(token);
       const user = await this.checkuserExists(decoded.username);
@@ -20,11 +20,14 @@ export class CheckTokenUseCase {
       return {
         userId: user.id,
         username: user.username,
+        role: user.role,
       };
     } catch (error) {
       this.logger.warn(
         'check token',
-        `Error decoding token: ${JSON.stringify(error)}`
+        `Error decoding token: ${JSON.stringify(
+          error
+        )} request-code=${request_code}`
       );
 
       throw this.exceptionService.forbiddenException({

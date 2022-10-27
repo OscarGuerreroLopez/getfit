@@ -11,6 +11,6 @@ export class AppService {
   ) {}
 
   async checkToken(token: string) {
-    return await this.checkTokenUsecaseProxy.getInstance().checkToken(token);
+    return await this.checkTokenUsecaseProxy.getInstance().execute(token);
   }
 }

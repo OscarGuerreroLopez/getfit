@@ -1,10 +1,19 @@
-import { Body, Controller, Get, Inject, Post, Request } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Inject,
+  Post,
+  Request,
+  UseGuards,
+} from '@nestjs/common';
 import { Request as RequestExpress } from 'express';
 import {
   ExerciseUseCasesProxyModule,
   UseCaseProxy,
   ExceptionsService,
   LoggerService,
+  ApiGuardGuard,
 } from '@getfit/infra';
 import { AddExerciseUseCase, GetExercisesUseCase } from '@getfit/exercise';
 import { AddExerciseDto } from './addExercise.dto';
@@ -22,6 +31,7 @@ export class AppController {
   ) {}
 
   @Get()
+  @UseGuards(ApiGuardGuard)
   async getExercises(@Request() req: RequestExpress) {
     const user = req.headers['user'] as string;
 
@@ -46,6 +56,7 @@ export class AppController {
   }
 
   @Post()
+  @UseGuards(ApiGuardGuard)
   async addExercise(
     @Body() exerciseDto: AddExerciseDto,
     @Request() req: RequestExpress

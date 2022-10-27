@@ -15,3 +15,5 @@ export * from './exceptions/exceptions.service';
 export * from './config/environment-config/environment-config.module';
 export * from './config/environment-config/environment-config.service';
 export * from './common/guards/get-user.guard';
+export * from './common/guards/user-exercise.guard';
+export * from './common/guards/api-guard.guard';

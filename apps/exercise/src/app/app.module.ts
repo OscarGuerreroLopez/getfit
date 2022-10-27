@@ -5,6 +5,8 @@ import {
   ExceptionsService,
   LoggerModule,
   LoggerService,
+  EnvironmentConfigModule,
+  EnvironmentConfigService,
 } from '@getfit/infra';
 import { AppController } from './app.controller';
 
@@ -13,8 +15,9 @@ import { AppController } from './app.controller';
     ExerciseUseCasesProxyModule.register(),
     ExceptionsModule,
     LoggerModule,
+    EnvironmentConfigModule,
   ],
   controllers: [AppController],
-  providers: [ExceptionsService, LoggerService],
+  providers: [ExceptionsService, LoggerService, EnvironmentConfigService],
 })
 export class AppModule {}

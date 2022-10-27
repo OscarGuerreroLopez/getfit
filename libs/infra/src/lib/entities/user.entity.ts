@@ -9,7 +9,7 @@ export class UserEntity {
   @Column('varchar', { unique: true })
   username!: string;
 
-  @Index({ unique: true })
+  @Index({ unique: false })
   @Column('varchar', { unique: false })
   role!: string;
 

@@ -6,6 +6,14 @@ services:
       - JWT_SECRET
       - JWT_EXPIRATION_TIME
       - NODE_ENV
+      - ORCH_PORT
+      - USER_PORT
+      - EXERCISE_PORT
+      - USER_LOCAL_URL
+      - EXERCISE_LOCAL_URL
+      - API_KEY
+      - USER_DOCKER_URL
+      - EXERCISE_DOCKER_URL
     ports:
       - '3334:3334'
     depends_on:
@@ -18,8 +26,37 @@ services:
       - JWT_SECRET
       - JWT_EXPIRATION_TIME
       - NODE_ENV
+      - ORCH_PORT
+      - USER_PORT
+      - EXERCISE_PORT
+      - USER_LOCAL_URL
+      - EXERCISE_LOCAL_URL
+      - API_KEY
+      - USER_DOCKER_URL
+      - EXERCISE_DOCKER_URL
     ports:
       - '3333:3333'
+    depends_on:
+      - sqlite3
+    volumes:
+      - ./db/user:/app/user
+
+  orch:
+    image: orch
+    environment:
+      - JWT_SECRET
+      - JWT_EXPIRATION_TIME
+      - NODE_ENV
+      - ORCH_PORT
+      - USER_PORT
+      - EXERCISE_PORT
+      - USER_LOCAL_URL
+      - EXERCISE_LOCAL_URL
+      - API_KEY
+      - USER_DOCKER_URL
+      - EXERCISE_DOCKER_URL
+    ports:
+      - '8888:8888'
     depends_on:
       - sqlite3
     volumes:

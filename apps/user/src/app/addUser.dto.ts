@@ -9,6 +9,12 @@ export class AddUserDto {
 
   @IsNotEmpty()
   @IsString()
+  @MinLength(4)
+  @MaxLength(10)
+  readonly role: string;
+
+  @IsNotEmpty()
+  @IsString()
   @MaxLength(12)
   @MinLength(6)
   readonly password: string;

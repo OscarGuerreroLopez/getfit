@@ -8,6 +8,6 @@ const exceptions = new ExceptionsService();
 export const HandleValidationErrors = (
   validationErrors: ValidationError[] = []
 ) => {
-  logger.log('validation', JSON.stringify(validationErrors));
+  logger.warn('validation', JSON.stringify(validationErrors));
   exceptions.badRequestException({ message: 'check logs' });
 };

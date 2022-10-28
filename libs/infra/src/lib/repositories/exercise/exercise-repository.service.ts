@@ -1,18 +1,15 @@
 import { Injectable } from '@nestjs/common';
+import { validate } from 'class-validator';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { ExerciseRepository, ExerciseModel } from '@getfit/exercise';
+import { IExerciseRepository, ExerciseModel } from '@getfit/exercise';
 import { ExerciseEntity } from '../../entities/exercise.entity';
-import { ExceptionsService } from '../../exceptions/exceptions.service';
-import { LoggerService } from '../../logger/logger.service';
 
 @Injectable()
-export class ExerciseRepositoryService implements ExerciseRepository {
+export class ExerciseRepositoryService implements IExerciseRepository {
   constructor(
     @InjectRepository(ExerciseEntity)
-    private readonly exerciseRepository: Repository<ExerciseEntity>,
-    private readonly exceptionService: ExceptionsService,
-    private readonly loggerService: LoggerService
+    private readonly exerciseRepository: Repository<ExerciseEntity>
   ) {}
 
   async getExercises(
@@ -20,8 +17,8 @@ export class ExerciseRepositoryService implements ExerciseRepository {
   ): Promise<{ exercises: ExerciseModel[]; count: number }> {
     const exercisesEntity = await this.exerciseRepository.findAndCount({
       where: {
-        userId,
-      },
+        userId
+      }
     });
 
     const exercises = exercisesEntity[0].map((exerciseEntity) =>
@@ -34,22 +31,13 @@ export class ExerciseRepositoryService implements ExerciseRepository {
   }
 
   async insert(exercise: ExerciseModel): Promise<ExerciseModel> {
-    const exerciseEntity = this.toExerciseEntity(exercise);
+    const exerciseEntity = await this.toExerciseEntity(exercise);
     const result = await this.exerciseRepository.save(exerciseEntity);
 
     return this.toExerciseModel(result);
   }
 
   private toExerciseModel(exerciseDetailEntity: ExerciseEntity): ExerciseModel {
-    if (!exerciseDetailEntity?.id) {
-      this.loggerService.warn(
-        'toExercise missing entity',
-        JSON.stringify(exerciseDetailEntity)
-      );
-      this.exceptionService.internalServerErrorException({
-        message: 'Error converting exercise, check logs',
-      });
-    }
     const exerciseDetail: ExerciseModel = new ExerciseModel();
     exerciseDetail.id = exerciseDetailEntity.id;
     exerciseDetail.userId = exerciseDetailEntity.userId;
@@ -59,13 +47,20 @@ export class ExerciseRepositoryService implements ExerciseRepository {
     return exerciseDetail;
   }
 
-  private toExerciseEntity(exerciseModel: ExerciseModel): ExerciseEntity {
+  private async toExerciseEntity(
+    exerciseModel: ExerciseModel
+  ): Promise<ExerciseEntity> {
     const exerciseDetail: ExerciseEntity = new ExerciseEntity();
 
     exerciseDetail.id = exerciseModel.id;
     exerciseDetail.userId = exerciseModel.userId;
     exerciseDetail.content = exerciseModel.content;
     exerciseDetail.created_at = exerciseModel.created_at;
+
+    const errors = await validate(exerciseDetail);
+    if (errors.length > 0) {
+      throw new Error(JSON.stringify(errors));
+    }
 
     return exerciseDetail;
   }

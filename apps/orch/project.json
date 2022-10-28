@@ -1,0 +1,72 @@
+{
+  "name": "orch",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/orch/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "target": "node",
+        "compiler": "tsc",
+        "outputPath": "dist/apps/orch",
+        "main": "apps/orch/src/main.ts",
+        "tsConfig": "apps/orch/tsconfig.app.json",
+        "assets": ["apps/orch/src/assets"],
+        "generatePackageJson": true
+      },
+      "configurations": {
+        "production": {
+          "optimization": true,
+          "extractLicenses": true,
+          "inspect": false,
+          "fileReplacements": [
+            {
+              "replace": "apps/orch/src/environments/environment.ts",
+              "with": "apps/orch/src/environments/environment.prod.ts"
+            }
+          ]
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/js:node",
+      "options": {
+        "buildTarget": "orch:build"
+      },
+      "configurations": {
+        "production": {
+          "buildTarget": "orch:build:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/orch/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/apps/orch"],
+      "options": {
+        "jestConfig": "apps/orch/jest.config.ts",
+        "passWithNoTests": true
+      }
+    },
+    "deploy": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          "nx lint orch",
+          "nx build orch",
+          "docker build -f ./apps/orch/Dockerfile . -t orch"
+        ],
+        "parallel": false
+      }
+    }
+  },
+  "tags": []
+}

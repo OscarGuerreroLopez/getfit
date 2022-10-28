@@ -1,6 +1,6 @@
 import { ExerciseModel } from '../model';
 
-export interface ExerciseRepository {
+export interface IExerciseRepository {
   getExercises(
     userid: number
   ): Promise<{ exercises: ExerciseModel[]; count: number }>;

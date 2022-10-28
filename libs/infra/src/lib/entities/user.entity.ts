@@ -9,6 +9,10 @@ export class UserEntity {
   @Column('varchar', { unique: true })
   username!: string;
 
+  @Index({ unique: false })
+  @Column('varchar', { unique: false })
+  role!: string;
+
   @Column('text')
   password!: string;
 }

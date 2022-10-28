@@ -43,11 +43,21 @@ export class ExerciseUseCasesProxyModule {
             ),
         },
         {
-          inject: [ExerciseRepositoryService],
+          inject: [ExerciseRepositoryService, LoggerService, ExceptionsService],
           provide:
             ExerciseUseCasesProxyModule.GET_EXERCISES_DETAIL_USECASES_PROXY,
-          useFactory: (exerciseRepository: ExerciseRepositoryService) =>
-            new UseCaseProxy(new GetExercisesUseCase(exerciseRepository)),
+          useFactory: (
+            exerciseRepository: ExerciseRepositoryService,
+            logger: LoggerService,
+            exceptionsService: ExceptionsService
+          ) =>
+            new UseCaseProxy(
+              new GetExercisesUseCase(
+                exerciseRepository,
+                logger,
+                exceptionsService
+              )
+            ),
         },
       ],
       exports: [

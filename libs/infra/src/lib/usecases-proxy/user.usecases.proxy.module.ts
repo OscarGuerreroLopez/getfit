@@ -38,21 +38,38 @@ export class UserUseCasesProxyModule {
       module: UserUseCasesProxyModule,
       providers: [
         {
-          inject: [UserRepository],
+          inject: [UserRepository, ExceptionsService, LoggerService],
           provide: UserUseCasesProxyModule.GET_USER_DETAIL_USECASES_PROXY,
-          useFactory: (userRepository: UserRepository) =>
-            new UseCaseProxy(new GetUserUseCase(userRepository)),
+          useFactory: (
+            userRepository: UserRepository,
+            exceptionsService: ExceptionsService,
+            logger: LoggerService
+          ) =>
+            new UseCaseProxy(
+              new GetUserUseCase(userRepository, exceptionsService, logger)
+            ),
         },
         {
-          inject: [UserRepository, LoggerService, BcryptService],
+          inject: [
+            UserRepository,
+            LoggerService,
+            BcryptService,
+            ExceptionsService,
+          ],
           provide: UserUseCasesProxyModule.INSERT_USER_DETAIL_USECASES_PROXY,
           useFactory: (
             userRepository: UserRepository,
             logger: LoggerService,
-            bcrypt: BcryptService
+            bcrypt: BcryptService,
+            exceptionsService: ExceptionsService
           ) =>
             new UseCaseProxy(
-              new AddUserUseCase(userRepository, logger, bcrypt)
+              new AddUserUseCase(
+                userRepository,
+                logger,
+                bcrypt,
+                exceptionsService
+              )
             ),
         },
         {

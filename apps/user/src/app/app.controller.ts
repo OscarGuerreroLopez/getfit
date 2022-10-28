@@ -6,9 +6,16 @@ import {
   Param,
   Post,
   HttpCode,
+  Request,
+  UseGuards,
 } from '@nestjs/common';
+import { Request as ExpressRequest } from 'express';
 
-import { UserUseCasesProxyModule, UseCaseProxy } from '@getfit/infra';
+import {
+  UserUseCasesProxyModule,
+  UseCaseProxy,
+  GetUserGuard,
+} from '@getfit/infra';
 import { AddUserDto } from './addUser.dto';
 import {
   AddUserUseCase,
@@ -18,6 +25,7 @@ import {
 } from '@getfit/user';
 import { UserPresenter } from './user.presenter';
 import { AuthDto } from './auth.dto';
+import { LoginDto } from './login.dto';
 
 @Controller()
 export class AppController {
@@ -33,23 +41,32 @@ export class AppController {
   ) {}
 
   @Get(':username')
-  async getData(@Param('username') username: string) {
-    const result = await this.getUserDetail.getInstance().execute(username);
+  @UseGuards(GetUserGuard)
+  async getData(
+    @Param('username') username: string,
+    @Request() req: ExpressRequest
+  ) {
+    const result = await this.getUserDetail
+      .getInstance()
+      .execute(username, req.headers['request-code'] as string);
 
     return new UserPresenter(result);
   }
 
   @Post()
-  async addUser(@Body() addUserDto: AddUserDto) {
+  async addUser(
+    @Body() addUserDto: AddUserDto,
+    @Request() req: ExpressRequest
+  ) {
     const userCreated = await this.addUserDetail
       .getInstance()
-      .execute(addUserDto);
+      .execute(addUserDto, req.headers['request-code'] as string);
 
     return new UserPresenter(userCreated);
   }
 
   @Post('login')
-  async login(@Body() auth: AddUserDto) {
+  async login(@Body() auth: LoginDto) {
     const accessToken = await this.loginUsecaseProxy
       .getInstance()
       .validateUser(auth.username, auth.password);
@@ -62,7 +79,7 @@ export class AppController {
   async auth(@Body() auth: AuthDto) {
     const accessToken = await this.checkTokenUsecaseProxy
       .getInstance()
-      .checkToken(auth.token);
+      .execute(auth.token);
 
     return accessToken;
   }

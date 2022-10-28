@@ -1,43 +1,40 @@
 import { IJwtService, ILogger, IException } from '@getfit/domain';
-import { UserRepository } from '../entities/repositories';
+import { IUserRepository } from '../entities/repositories';
 
 export class CheckTokenUseCase {
   constructor(
     private readonly logger: ILogger,
     private readonly jwtTokenService: IJwtService,
-    private readonly userRepository: UserRepository,
+    private readonly userRepository: IUserRepository,
     private readonly exceptionService: IException
   ) {}
 
-  async checkToken(token: string) {
-    let result;
+  async execute(token: string, request_code = '0') {
     try {
       const decoded = await this.jwtTokenService.checkToken(token);
       const user = await this.checkuserExists(decoded.username);
-
-      result = {
-        userId: user.id,
-        username: user.username,
-      };
-    } catch (error) {
-      if (error instanceof Error) {
-        this.logger.warn(
-          'check token',
-          `Error decoding token: ${error.message}`
-        );
-      } else {
-        this.logger.warn(
-          'check token',
-          `Error decoding token: ${JSON.stringify(error)}`
-        );
+      if (!user) {
+        throw `User ${decoded.username} not found on DB`;
       }
 
-      this.exceptionService.forbiddenException({
+      return {
+        userId: user.id,
+        username: user.username,
+        role: user.role,
+      };
+    } catch (error) {
+      this.logger.warn(
+        'check token',
+        `Error decoding token: ${JSON.stringify(
+          error
+        )} request-code=${request_code}`
+      );
+
+      throw this.exceptionService.forbiddenException({
         message: `You are not authorized`,
+        code_error: 403,
       });
     }
-
-    return result;
   }
 
   private async checkuserExists(username: string) {

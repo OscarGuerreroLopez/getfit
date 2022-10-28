@@ -32,20 +32,7 @@ export class AppController {
 
   @Get()
   async getExercises(@Request() req: RequestExpress) {
-    const user = req.headers['user'] as string;
-
-    if (!user) {
-      this.logger.warn(
-        'get exercise',
-        `there is no user on this request ${req.headers['request-code']}`
-      );
-      this.exceptionService.badRequestException({
-        message: 'Cannot post this exercise, check logs',
-        code_error: 400
-      });
-    }
-
-    const parsedUser = JSON.parse(user);
+    const parsedUser = JSON.parse(req.headers['user'] as string);
 
     const getExercises = await this.getExercisesDetail
       .getInstance()
@@ -59,21 +46,9 @@ export class AppController {
     @Body() exerciseDto: AddExerciseDto,
     @Request() req: RequestExpress
   ) {
-    const user = req.headers['user'] as string;
     const request_code = req.headers['request-code'] as string;
 
-    if (!user) {
-      this.logger.warn(
-        'add exercise',
-        `there is no user on this request ${req.headers['request-code']}`
-      );
-      this.exceptionService.badRequestException({
-        message: 'Cannot post this exercise, check logs',
-        code_error: 400
-      });
-    }
-
-    const parsedUser = JSON.parse(user);
+    const parsedUser = JSON.parse(req.headers['user'] as string);
 
     const exerciseCreated = await this.addExerciseDetail
       .getInstance()

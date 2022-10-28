@@ -3,7 +3,7 @@ import {
   IJwtServicePayload,
   IJwtService,
   IJWTConfig,
-  ILogger,
+  ILogger
 } from '@getfit/domain';
 import { IUserRepository } from '../entities/repositories';
 import { ExceptionsService } from '@getfit/infra';
@@ -29,8 +29,8 @@ export class LoginUseCases {
         'user validation login',
         `${username} password mismatch. request-code=${request_code}`
       );
-      this.exceptionService.UnauthorizedException({
-        message: 'Something went wrong, check logs',
+      throw this.exceptionService.UnauthorizedException({
+        message: 'Something went wrong, check logs'
       });
     }
     this.logger.log(

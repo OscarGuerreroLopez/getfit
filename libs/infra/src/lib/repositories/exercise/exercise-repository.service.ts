@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { validate } from 'class-validator';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { IExerciseRepository, ExerciseModel } from '@getfit/exercise';
@@ -16,8 +17,8 @@ export class ExerciseRepositoryService implements IExerciseRepository {
   ): Promise<{ exercises: ExerciseModel[]; count: number }> {
     const exercisesEntity = await this.exerciseRepository.findAndCount({
       where: {
-        userId,
-      },
+        userId
+      }
     });
 
     const exercises = exercisesEntity[0].map((exerciseEntity) =>
@@ -30,7 +31,7 @@ export class ExerciseRepositoryService implements IExerciseRepository {
   }
 
   async insert(exercise: ExerciseModel): Promise<ExerciseModel> {
-    const exerciseEntity = this.toExerciseEntity(exercise);
+    const exerciseEntity = await this.toExerciseEntity(exercise);
     const result = await this.exerciseRepository.save(exerciseEntity);
 
     return this.toExerciseModel(result);
@@ -46,13 +47,20 @@ export class ExerciseRepositoryService implements IExerciseRepository {
     return exerciseDetail;
   }
 
-  private toExerciseEntity(exerciseModel: ExerciseModel): ExerciseEntity {
+  private async toExerciseEntity(
+    exerciseModel: ExerciseModel
+  ): Promise<ExerciseEntity> {
     const exerciseDetail: ExerciseEntity = new ExerciseEntity();
 
     exerciseDetail.id = exerciseModel.id;
     exerciseDetail.userId = exerciseModel.userId;
     exerciseDetail.content = exerciseModel.content;
     exerciseDetail.created_at = exerciseModel.created_at;
+
+    const errors = await validate(exerciseDetail);
+    if (errors.length > 0) {
+      throw new Error(JSON.stringify(errors));
+    }
 
     return exerciseDetail;
   }

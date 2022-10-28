@@ -26,7 +26,7 @@ export class AddExerciseUseCase {
       const result = await this.exerciseRepository.insert({
         userId,
         content,
-        created_at,
+        created_at
       });
 
       this.logger.log(
@@ -38,11 +38,13 @@ export class AddExerciseUseCase {
     } catch (error) {
       this.logger.warn(
         'AddUExerciseUseCase',
-        `${JSON.stringify(error)}. request-code=${request_code}`
+        `${
+          error instanceof Error ? error.message : JSON.stringify(error)
+        }. request-code=${request_code}`
       );
       throw this.exception.badRequestException({
         message: 'Error adding the exercise, check logs',
-        code_error: 400,
+        code_error: 400
       });
     }
   }

@@ -19,18 +19,20 @@ export class GetExercisesUseCase {
 
       const response = result.exercises.map((exercise) => ({
         ...exercise,
-        user: { name: username },
+        user: { name: username }
       }));
 
       return response;
     } catch (error) {
       this.logger.warn(
-        'AddUExerciseUseCase',
-        `${JSON.stringify(error)} request-code=${request_code}`
+        'GetUExerciseUseCase',
+        `${
+          error instanceof Error ? error.message : JSON.stringify(error)
+        }. request-code=${request_code}`
       );
       throw this.exception.badRequestException({
-        message: 'Error adding the exercise, check logs',
-        code_error: 400,
+        message: 'Error getting the exercise, check logs',
+        code_error: 400
       });
     }
   }

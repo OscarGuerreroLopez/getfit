@@ -5,7 +5,7 @@ import {
   Inject,
   Post,
   Request,
-  UseGuards,
+  UseGuards
 } from '@nestjs/common';
 import { Request as RequestExpress } from 'express';
 import {
@@ -13,7 +13,7 @@ import {
   UseCaseProxy,
   ExceptionsService,
   LoggerService,
-  UserExerciseGuard,
+  UserExerciseGuard
 } from '@getfit/infra';
 import { AddExerciseUseCase, GetExercisesUseCase } from '@getfit/exercise';
 import { AddExerciseDto } from './addExercise.dto';
@@ -41,7 +41,7 @@ export class AppController {
       );
       this.exceptionService.badRequestException({
         message: 'Cannot post this exercise, check logs',
-        code_error: 400,
+        code_error: 400
       });
     }
 
@@ -60,6 +60,7 @@ export class AppController {
     @Request() req: RequestExpress
   ) {
     const user = req.headers['user'] as string;
+    const request_code = req.headers['request-code'] as string;
 
     if (!user) {
       this.logger.warn(
@@ -68,7 +69,7 @@ export class AppController {
       );
       this.exceptionService.badRequestException({
         message: 'Cannot post this exercise, check logs',
-        code_error: 400,
+        code_error: 400
       });
     }
 
@@ -76,7 +77,7 @@ export class AppController {
 
     const exerciseCreated = await this.addExerciseDetail
       .getInstance()
-      .execute(parsedUser.userId, exerciseDto.content);
+      .execute(parsedUser.userId, exerciseDto.content, request_code);
 
     return new ExercisePresenter(exerciseCreated);
   }

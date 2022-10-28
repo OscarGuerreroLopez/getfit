@@ -26,7 +26,7 @@ async function bootstrap() {
   app.use(
     rateLimit({
       windowMs: 15 * 60 * 1000, // 15 minutes
-      max: 100, // limit each IP to 100 requests per windowMs
+      max: 100 // limit each IP to 100 requests per windowMs
     })
   );
   // Filter
@@ -51,7 +51,10 @@ async function bootstrap() {
   app.use(
     '/user',
     createProxyMiddleware({
-      target: process.env.USER_LOCAL_URL,
+      target:
+        process.env.LOCAL_ENV === 'docker'
+          ? process.env.USER_DOCKER_URL
+          : process.env.USER_LOCAL_URL,
       changeOrigin: true,
       onProxyReq: async (clientRequest, req, res) => {
         try {
@@ -62,14 +65,17 @@ async function bootstrap() {
         } catch (error) {
           res.status(error.status || 500).send(error);
         }
-      },
+      }
     })
   );
 
   app.use(
     '/exercise',
     createProxyMiddleware({
-      target: process.env.EXERCISE_LOCAL_URL,
+      target:
+        process.env.LOCAL_ENV === 'docker'
+          ? process.env.EXERCISE_DOCKER_URL
+          : process.env.EXERCISE_LOCAL_URL,
       changeOrigin: true,
       onProxyReq: async (clientRequest, req, res) => {
         try {
@@ -80,7 +86,7 @@ async function bootstrap() {
         } catch (error) {
           res.status(error.status || 500).send(error);
         }
-      },
+      }
     })
   );
 

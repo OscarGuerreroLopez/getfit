@@ -34,4 +34,8 @@ export class EnvironmentConfigService implements IJWTConfig {
   getApiKey(): string {
     return this.configService.get<string>('API_KEY') || '';
   }
+
+  getLocalEnv(): string {
+    return this.configService.get<string>('LOCAL_ENV') || '';
+  }
 }

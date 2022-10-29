@@ -14,6 +14,7 @@ services:
       - API_KEY
       - USER_DOCKER_URL
       - EXERCISE_DOCKER_URL
+      - LOCAL_ENV
     ports:
       - '3334:3334'
     depends_on:
@@ -21,7 +22,7 @@ services:
     volumes:
       - ./db/user:/app/user
   user:
-    image: user
+    image: user   
     environment:
       - JWT_SECRET
       - JWT_EXPIRATION_TIME
@@ -34,6 +35,7 @@ services:
       - API_KEY
       - USER_DOCKER_URL
       - EXERCISE_DOCKER_URL
+      - LOCAL_ENV
     ports:
       - '3333:3333'
     depends_on:
@@ -42,7 +44,7 @@ services:
       - ./db/user:/app/user
 
   orch:
-    image: orch
+    image: orch  
     environment:
       - JWT_SECRET
       - JWT_EXPIRATION_TIME
@@ -55,6 +57,7 @@ services:
       - API_KEY
       - USER_DOCKER_URL
       - EXERCISE_DOCKER_URL
+      - LOCAL_ENV
     ports:
       - '8888:8888'
     depends_on:

@@ -5,7 +5,7 @@ enum Environment {
   Development = 'development',
   Production = 'production',
   Local = 'local',
-  Test = 'test',
+  Test = 'test'
 }
 
 class EnvironmentVariables {
@@ -14,32 +14,45 @@ class EnvironmentVariables {
 
   @IsString()
   JWT_SECRET!: string;
+
   @IsString()
   JWT_EXPIRATION_TIME!: string;
+
   @IsNumber()
   ORCH_PORT!: number;
+
   @IsNumber()
   USER_PORT!: number;
+
   @IsNumber()
   EXERCISE_PORT!: number;
+
   @IsString()
   USER_LOCAL_URL!: string;
+
   @IsString()
   EXERCISE_LOCAL_URL!: string;
+
   @IsString()
   USER_DOCKER_URL!: string;
+
   @IsString()
   EXERCISE_DOCKER_URL!: string;
+
   @IsString()
   API_KEY!: string;
+
+  @IsString()
+  LOCAL_ENV!: string;
 }
 
 export function validate(config: Record<string, unknown>) {
   const validatedConfig = plainToClass(EnvironmentVariables, config, {
-    enableImplicitConversion: true,
+    enableImplicitConversion: true
   });
+
   const errors = validateSync(validatedConfig, {
-    skipMissingProperties: false,
+    skipMissingProperties: false
   });
 
   if (errors.length > 0) {

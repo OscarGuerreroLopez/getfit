@@ -3,10 +3,10 @@ import {
   IJwtServicePayload,
   IJwtService,
   IJWTConfig,
-  ILogger
+  ILogger,
+  IException,
 } from '@getfit/domain';
 import { IUserRepository } from '../entities/repositories';
-import { ExceptionsService } from '@getfit/infra';
 
 export class LoginUseCases {
   constructor(
@@ -15,7 +15,7 @@ export class LoginUseCases {
     private readonly jwtConfig: IJWTConfig,
     private readonly userRepository: IUserRepository,
     private readonly bcryptService: IBcryptService,
-    private readonly exceptionService: ExceptionsService
+    private readonly exceptionService: IException
   ) {}
 
   async validateUser(username: string, pass: string, request_code = '0') {
@@ -30,7 +30,7 @@ export class LoginUseCases {
         `${username} password mismatch. request-code=${request_code}`
       );
       throw this.exceptionService.UnauthorizedException({
-        message: 'Something went wrong, check logs'
+        message: 'Something went wrong, check logs',
       });
     }
     this.logger.log(

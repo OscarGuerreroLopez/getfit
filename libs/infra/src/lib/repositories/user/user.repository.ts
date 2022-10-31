@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-
 import { UserModel, IUserRepository } from '@getfit/user';
 import { UserEntity } from '../../entities/user.entity';
 import { ExceptionsService } from '../../exceptions/exceptions.service';

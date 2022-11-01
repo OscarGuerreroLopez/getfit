@@ -1,11 +1,6 @@
 import { Body, Controller, Get, Inject, Post, Request } from '@nestjs/common';
 import { Request as RequestExpress } from 'express';
-import {
-  ExerciseUseCasesProxyModule,
-  UseCaseProxy,
-  ExceptionsService,
-  LoggerService,
-} from '@getfit/infra';
+import { ExerciseUseCasesProxyModule, UseCaseProxy } from '@getfit/infra';
 import {
   AddExerciseUseCase,
   GetExercisesUseCase,
@@ -18,12 +13,10 @@ import { ExercisePresenter } from './exercise.presenter';
 @Controller()
 export class AppController {
   constructor(
-    private readonly exceptionService: ExceptionsService,
     @Inject(ExerciseUseCasesProxyModule.ADD_EXERCISES_DETAIL_USECASES_PROXY)
     private readonly addExerciseDetail: UseCaseProxy<AddExerciseUseCase>,
     @Inject(ExerciseUseCasesProxyModule.GET_EXERCISES_DETAIL_USECASES_PROXY)
-    private readonly getExercisesDetail: UseCaseProxy<GetExercisesUseCase>,
-    private readonly logger: LoggerService
+    private readonly getExercisesDetail: UseCaseProxy<GetExercisesUseCase>
   ) {}
 
   @Get()

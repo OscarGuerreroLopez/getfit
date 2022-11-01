@@ -66,20 +66,24 @@ export class AppController {
   }
 
   @Post('login')
-  async login(@Body() auth: LoginDto) {
+  async login(@Body() auth: LoginDto, @Request() req: ExpressRequest) {
     const accessToken = await this.loginUsecaseProxy
       .getInstance()
-      .validateUser(auth.username, auth.password);
+      .validateUser(
+        auth.username,
+        auth.password,
+        req.headers['request-code'] as string
+      );
 
     return accessToken;
   }
 
   @Post('auth')
   @HttpCode(200)
-  async auth(@Body() auth: AuthDto) {
+  async auth(@Body() auth: AuthDto, @Request() req: ExpressRequest) {
     const accessToken = await this.checkTokenUsecaseProxy
       .getInstance()
-      .execute(auth.token);
+      .execute(auth.token, req.headers['request-code'] as string);
 
     return accessToken;
   }

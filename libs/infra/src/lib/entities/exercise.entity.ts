@@ -1,5 +1,4 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
-import { Length } from 'class-validator';
 
 @Entity()
 export class ExerciseEntity {
@@ -9,8 +8,9 @@ export class ExerciseEntity {
   @Column({ name: 'userId' })
   userId!: number;
 
-  @Column('varchar')
-  @Length(10, 100)
+  @Column({
+    length: 100,
+  })
   content!: string;
 
   @Column({ name: 'created_at' })

@@ -1,6 +1,7 @@
 import { IException, ILogger } from '@getfit/domain';
-import { ExerciseModel } from '../entities/model';
+
 import { IExerciseRepository } from '../entities/repositories';
+import { IGetExercise } from '../interfaces';
 
 export class GetExercisesUseCase {
   constructor(
@@ -13,13 +14,13 @@ export class GetExercisesUseCase {
     userId: number,
     username: string,
     request_code = '0'
-  ): Promise<ExerciseModel[]> {
+  ): Promise<IGetExercise[]> {
     try {
       const result = await this.exerciseRepository.getExercises(userId);
 
       const response = result.exercises.map((exercise) => ({
         ...exercise,
-        user: { name: username }
+        user: { name: username },
       }));
 
       return response;
@@ -32,7 +33,7 @@ export class GetExercisesUseCase {
       );
       throw this.exception.badRequestException({
         message: 'Error getting the exercise, check logs',
-        code_error: 400
+        code_error: 400,
       });
     }
   }

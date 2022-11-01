@@ -17,8 +17,8 @@ export class ExerciseRepositoryService implements IExerciseRepository {
   ): Promise<{ exercises: ExerciseModel[]; count: number }> {
     const exercisesEntity = await this.exerciseRepository.findAndCount({
       where: {
-        userId
-      }
+        userId,
+      },
     });
 
     const exercises = exercisesEntity[0].map((exerciseEntity) =>
@@ -31,37 +31,40 @@ export class ExerciseRepositoryService implements IExerciseRepository {
   }
 
   async insert(exercise: ExerciseModel): Promise<ExerciseModel> {
-    const exerciseEntity = await this.toExerciseEntity(exercise);
+    const { userId, content, created_at } = exercise;
+    const exerciseModel = new ExerciseModel({ userId, content, created_at });
+    const exerciseEntity = await this.toExerciseEntity(exerciseModel);
     const result = await this.exerciseRepository.save(exerciseEntity);
 
     return this.toExerciseModel(result);
   }
 
-  private toExerciseModel(exerciseDetailEntity: ExerciseEntity): ExerciseModel {
-    const exerciseDetail: ExerciseModel = new ExerciseModel();
-    exerciseDetail.id = exerciseDetailEntity.id;
-    exerciseDetail.userId = exerciseDetailEntity.userId;
-    exerciseDetail.content = exerciseDetailEntity.content;
-    exerciseDetail.created_at = exerciseDetailEntity.created_at;
+  private toExerciseModel(exerciseEntity: ExerciseEntity): ExerciseModel {
+    const exerciseModel: ExerciseModel = new ExerciseModel({
+      id: exerciseEntity.id,
+      userId: exerciseEntity.userId,
+      content: exerciseEntity.content,
+      created_at: exerciseEntity.created_at,
+    });
 
-    return exerciseDetail;
+    return exerciseModel;
   }
 
   private async toExerciseEntity(
     exerciseModel: ExerciseModel
   ): Promise<ExerciseEntity> {
-    const exerciseDetail: ExerciseEntity = new ExerciseEntity();
+    const exerciseEntity: ExerciseEntity = new ExerciseEntity();
 
-    exerciseDetail.id = exerciseModel.id;
-    exerciseDetail.userId = exerciseModel.userId;
-    exerciseDetail.content = exerciseModel.content;
-    exerciseDetail.created_at = exerciseModel.created_at;
+    exerciseEntity.id = exerciseModel.id;
+    exerciseEntity.userId = exerciseModel.userId;
+    exerciseEntity.content = exerciseModel.content;
+    exerciseEntity.created_at = exerciseModel.created_at;
 
-    const errors = await validate(exerciseDetail);
+    const errors = await validate(exerciseEntity);
     if (errors.length > 0) {
       throw new Error(JSON.stringify(errors));
     }
 
-    return exerciseDetail;
+    return exerciseEntity;
   }
 }

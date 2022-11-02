@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { validate } from 'class-validator';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { IExerciseRepository, ExerciseModel } from '@getfit/exercise';
@@ -31,9 +30,7 @@ export class ExerciseRepositoryService implements IExerciseRepository {
   }
 
   async insert(exercise: ExerciseModel): Promise<ExerciseModel> {
-    const { userId, content, created_at } = exercise;
-    const exerciseModel = new ExerciseModel({ userId, content, created_at });
-    const exerciseEntity = await this.toExerciseEntity(exerciseModel);
+    const exerciseEntity = this.toExerciseEntity(exercise);
     const result = await this.exerciseRepository.save(exerciseEntity);
 
     return this.toExerciseModel(result);
@@ -50,20 +47,13 @@ export class ExerciseRepositoryService implements IExerciseRepository {
     return exerciseModel;
   }
 
-  private async toExerciseEntity(
-    exerciseModel: ExerciseModel
-  ): Promise<ExerciseEntity> {
+  private toExerciseEntity(exerciseModel: ExerciseModel): ExerciseEntity {
     const exerciseEntity: ExerciseEntity = new ExerciseEntity();
 
     exerciseEntity.id = exerciseModel.id;
     exerciseEntity.userId = exerciseModel.userId;
     exerciseEntity.content = exerciseModel.content;
     exerciseEntity.created_at = exerciseModel.created_at;
-
-    const errors = await validate(exerciseEntity);
-    if (errors.length > 0) {
-      throw new Error(JSON.stringify(errors));
-    }
 
     return exerciseEntity;
   }

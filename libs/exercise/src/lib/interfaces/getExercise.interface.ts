@@ -1,5 +1,5 @@
 import { ExerciseModel } from '../entities/model';
 
-export interface IGetExercise extends Pick<ExerciseModel, keyof ExerciseModel> {
+export interface IGetExercise extends ExerciseModel {
   user: { name: string };
 }

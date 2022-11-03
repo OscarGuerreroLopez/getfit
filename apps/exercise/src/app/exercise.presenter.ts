@@ -1,4 +1,4 @@
-import { IAddExercise } from '@getfit/exercise';
+import { ExerciseModel } from '@getfit/exercise';
 
 export class ExercisePresenter {
   id: number;
@@ -6,7 +6,7 @@ export class ExercisePresenter {
   content: string;
   created_at: Date;
 
-  constructor(exerciseDetail: IAddExercise) {
+  constructor(exerciseDetail: ExerciseModel) {
     this.id = exerciseDetail.id;
     this.userId = exerciseDetail.userId;
     this.content = exerciseDetail.content;

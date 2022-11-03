@@ -2,3 +2,4 @@ export * from './entities/model';
 export * from './entities/repositories';
 export * from './usecases';
 export * from './interfaces';
+export * from './factories/exerciseEntityFactory';

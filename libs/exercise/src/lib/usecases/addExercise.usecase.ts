@@ -1,7 +1,6 @@
 import { ILogger, IException } from '@getfit/domain';
 import { ExerciseModel } from '../entities/model';
 import { IExerciseRepository } from '../entities/repositories';
-import { IAddExercise } from '../interfaces';
 
 export class AddExerciseUseCase {
   constructor(
@@ -14,18 +13,21 @@ export class AddExerciseUseCase {
     userId: number,
     content: string,
     request_code = '0'
-  ): Promise<IAddExercise> {
+  ): Promise<ExerciseModel> {
     try {
       const created_at = new Date();
 
-      const exerciseModel = new ExerciseModel({ userId, content, created_at });
       const { count } = await this.exerciseRepository.getExercises(userId);
 
       if (count > 9) {
         throw `user ${userId} has more than 10 exercises already`;
       }
 
-      const result = await this.exerciseRepository.insert(exerciseModel);
+      const result = await this.exerciseRepository.insert({
+        userId,
+        content,
+        created_at,
+      });
 
       this.logger.log(
         'AddUExerciseUseCase',

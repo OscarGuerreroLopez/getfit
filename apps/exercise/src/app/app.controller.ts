@@ -3,8 +3,8 @@ import { Request as RequestExpress } from 'express';
 import { ExerciseUseCasesProxyModule, UseCaseProxy } from '@getfit/infra';
 import {
   AddExerciseUseCase,
+  ExerciseModel,
   GetExercisesUseCase,
-  IAddExercise,
   IGetExercise,
 } from '@getfit/exercise';
 import { AddExerciseDto } from './addExercise.dto';
@@ -34,12 +34,12 @@ export class AppController {
   async addExercise(
     @Body() exerciseDto: AddExerciseDto,
     @Request() req: RequestExpress
-  ): Promise<IAddExercise> {
+  ): Promise<ExerciseModel> {
     const request_code = req.headers['request-code'] as string;
 
     const parsedUser = JSON.parse(req.headers['user'] as string);
 
-    const exerciseCreated: IAddExercise = await this.addExerciseDetail
+    const exerciseCreated = await this.addExerciseDetail
       .getInstance()
       .execute(parsedUser.userId, exerciseDto.content, request_code);
 

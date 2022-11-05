@@ -34,7 +34,7 @@ export class ExerciseRepositoryService implements IExerciseRepository {
     return { exercises, count };
   }
 
-  async insert(exercise: IExerciseModel): Promise<IExerciseModel> {
+  async insert(exercise: ExerciseModel): Promise<IExerciseModel> {
     const exerciseEntity = this.toExerciseEntity(exercise);
     const result = await this.exerciseRepository.save(exerciseEntity);
 
@@ -53,7 +53,7 @@ export class ExerciseRepositoryService implements IExerciseRepository {
     return exerciseModel;
   }
 
-  private toExerciseEntity(exerciseModel: IExerciseModel): ExerciseEntity {
+  private toExerciseEntity(exerciseModel: ExerciseModel): ExerciseEntity {
     const exerciseEntity: ExerciseEntity = new ExerciseEntity();
 
     exerciseEntity.id = exerciseModel.id;

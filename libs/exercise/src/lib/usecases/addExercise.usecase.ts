@@ -1,6 +1,7 @@
 import { ILogger, IException } from '@getfit/domain';
 import { IExerciseModel } from '../types';
 import { IExerciseRepository } from '../entities/repositories';
+import { ExerciseModel } from '../exercise';
 
 export class AddExerciseUseCase {
   constructor(
@@ -23,11 +24,13 @@ export class AddExerciseUseCase {
 
       const created_at = new Date();
 
-      const result = await this.exerciseRepository.insert({
+      const exerciseModel = new ExerciseModel({
         userId,
         content,
         created_at,
       });
+
+      const result = await this.exerciseRepository.insert(exerciseModel);
 
       this.logger.log(
         'AddUExerciseUseCase',

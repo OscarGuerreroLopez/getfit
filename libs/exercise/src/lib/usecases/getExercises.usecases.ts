@@ -14,16 +14,21 @@ export class GetExercisesUseCase {
     userId: number,
     username: string,
     request_code = '0'
-  ): Promise<IGetExercise[]> {
+  ): Promise<IGetExercise> {
     try {
-      const result = await this.exerciseRepository.getExercises(userId);
+      const { exercises, count } = await this.exerciseRepository.getExercises(
+        userId
+      );
 
-      const response = result.exercises.map((exercise) => ({
+      const exercisesMap = exercises.map((exercise) => ({
         ...exercise,
         user: { name: username },
       }));
 
-      return response;
+      return {
+        count,
+        exercises: exercisesMap,
+      };
     } catch (error) {
       this.logger.warn(
         'GetUExerciseUseCase',

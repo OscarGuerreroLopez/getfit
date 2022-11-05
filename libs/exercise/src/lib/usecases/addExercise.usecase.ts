@@ -15,19 +15,17 @@ export class AddExerciseUseCase {
     request_code = '0'
   ): Promise<ExerciseModel> {
     try {
-      const created_at = new Date();
-
       const { count } = await this.exerciseRepository.getExercises(userId);
 
       if (count > 9) {
         throw `user ${userId} has more than 10 exercises already`;
       }
 
-      const result = await this.exerciseRepository.insert({
-        userId,
-        content,
-        created_at,
-      });
+      const created_at = new Date();
+
+      const exerciseModel = new ExerciseModel({ userId, content, created_at });
+
+      const result = await this.exerciseRepository.insert(exerciseModel);
 
       this.logger.log(
         'AddUExerciseUseCase',

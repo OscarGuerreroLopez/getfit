@@ -9,6 +9,7 @@ import {
 } from '@getfit/exercise';
 import { AddExerciseDto } from './addExercise.dto';
 import { ExercisePresenter } from './exercise.presenter';
+import { GetExercisePresenter } from './getExercise.presenter';
 
 @Controller()
 export class AppController {
@@ -20,29 +21,29 @@ export class AppController {
   ) {}
 
   @Get()
-  async getExercises(@Request() req: RequestExpress): Promise<IGetExercise[]> {
+  async getExercises(@Request() req: RequestExpress) {
     const parsedUser = JSON.parse(req.headers['user'] as string);
 
-    const getExercises: IGetExercise[] = await this.getExercisesDetail
+    const getExercises = await this.getExercisesDetail
       .getInstance()
       .execute(parsedUser.userId, parsedUser.username);
 
-    return getExercises;
+    return new GetExercisePresenter(getExercises);
   }
 
   @Post()
   async addExercise(
     @Body() exerciseDto: AddExerciseDto,
     @Request() req: RequestExpress
-  ): Promise<ExerciseModel> {
+  ) {
     const request_code = req.headers['request-code'] as string;
 
     const parsedUser = JSON.parse(req.headers['user'] as string);
 
-    const exerciseCreated = await this.addExerciseDetail
+    const exercise = await this.addExerciseDetail
       .getInstance()
       .execute(parsedUser.userId, exerciseDto.content, request_code);
 
-    return new ExercisePresenter(exerciseCreated);
+    return new ExercisePresenter(exercise);
   }
 }

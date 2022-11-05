@@ -1,19 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import {
-  IExerciseRepository,
-  ExerciseModel,
-  ExerciseEntityFactory,
-} from '@getfit/exercise';
+import { IExerciseRepository, ExerciseModel } from '@getfit/exercise';
 import { ExerciseEntity } from '../../entities/exercise.entity';
 
 @Injectable()
 export class ExerciseRepositoryService implements IExerciseRepository {
   constructor(
     @InjectRepository(ExerciseEntity)
-    private readonly exerciseRepository: Repository<ExerciseEntity>,
-    private readonly exerciseEntityFactory: ExerciseEntityFactory
+    private readonly exerciseRepository: Repository<ExerciseEntity>
   ) {}
 
   async getExercises(
@@ -35,9 +30,7 @@ export class ExerciseRepositoryService implements IExerciseRepository {
   }
 
   async insert(exercise: ExerciseModel): Promise<ExerciseModel> {
-    const exerciseModel =
-      this.exerciseEntityFactory.createNewExerciseModel(exercise);
-    const exerciseEntity = this.toExerciseEntity(exerciseModel);
+    const exerciseEntity = this.toExerciseEntity(exercise);
     const result = await this.exerciseRepository.save(exerciseEntity);
 
     return this.toExerciseModel(result);
@@ -45,11 +38,11 @@ export class ExerciseRepositoryService implements IExerciseRepository {
 
   private toExerciseModel(exerciseEntity: ExerciseEntity): ExerciseModel {
     const { id, userId, content, created_at } = exerciseEntity;
-    const exerciseModel = this.exerciseEntityFactory.createNewExerciseModel({
-      id,
+    const exerciseModel = new ExerciseModel({
       userId,
       content,
       created_at,
+      id,
     });
 
     return exerciseModel;

@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ExerciseEntityFactory } from '@getfit/exercise';
 import { TypeormModule } from '../../config/typeorm/typeorm.module';
 import { ExerciseEntity } from '../../entities/exercise.entity';
 import { LoggerModule } from '../../logger/logger.module';
@@ -16,15 +15,7 @@ import { LoggerService } from '../../logger/logger.service';
     LoggerModule,
     ExceptionsModule,
   ],
-  providers: [
-    ExerciseRepositoryService,
-    ExceptionsService,
-    LoggerService,
-    {
-      provide: ExerciseEntityFactory,
-      useClass: ExerciseEntityFactory,
-    },
-  ],
+  providers: [ExerciseRepositoryService, ExceptionsService, LoggerService],
   exports: [ExerciseRepositoryService],
 })
 export class ExerciseRepositoryModule {}

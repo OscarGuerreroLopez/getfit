@@ -1,10 +1,12 @@
+import { IExerciseModel } from '../../types';
+
 export class ExerciseModel {
   public id?: number;
   public userId!: number;
   public content!: string;
   public created_at!: Date;
 
-  constructor(model: Pick<ExerciseModel, keyof ExerciseModel>) {
+  constructor(model: IExerciseModel) {
     this.userId = this.makeUserId(model.userId);
     this.content = this.makeContent(model.content);
     this.created_at = this.makeCreatedAt(model.created_at);

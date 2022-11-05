@@ -1,12 +1,7 @@
 import { Body, Controller, Get, Inject, Post, Request } from '@nestjs/common';
 import { Request as RequestExpress } from 'express';
 import { ExerciseUseCasesProxyModule, UseCaseProxy } from '@getfit/infra';
-import {
-  AddExerciseUseCase,
-  ExerciseModel,
-  GetExercisesUseCase,
-  IGetExercise,
-} from '@getfit/exercise';
+import { AddExerciseUseCase, GetExercisesUseCase } from '@getfit/exercise';
 import { AddExerciseDto } from './addExercise.dto';
 import { ExercisePresenter } from './exercise.presenter';
 import { GetExercisePresenter } from './getExercise.presenter';

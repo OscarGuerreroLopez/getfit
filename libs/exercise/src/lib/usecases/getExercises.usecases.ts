@@ -1,7 +1,7 @@
 import { IException, ILogger } from '@getfit/domain';
 
 import { IExerciseRepository } from '../entities/repositories';
-import { IGetExercise } from '../interfaces';
+import { IGetExercise } from '../types';
 
 export class GetExercisesUseCase {
   constructor(

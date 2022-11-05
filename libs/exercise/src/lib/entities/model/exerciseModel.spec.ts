@@ -1,5 +1,4 @@
 import { ExerciseModel } from '.';
-import { IExerciseModel } from '../../types';
 
 jest.useFakeTimers().setSystemTime(new Date('2022-11-04'));
 

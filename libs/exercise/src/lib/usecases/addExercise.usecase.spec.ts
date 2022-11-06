@@ -1,6 +1,5 @@
 import { AddExerciseUseCase } from './addExercise.usecase';
 import { ILogger, IException } from '@getfit/domain';
-import { IExerciseModel } from '../types';
 import { IExerciseRepository } from '../entities/repositories';
 import { ExerciseModel } from '../entities/model';
 

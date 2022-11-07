@@ -38,12 +38,24 @@ In this section we have the domain for user, exercise and the general domain sha
 
 ### Running it locally
 
+```diff
+Modify .local.env
+make sure that env variable LOCAL_ENV is set to "local or something else than docker" before
+
+```
+
 ```sh
 npm install
 npm run serve_all
 ```
 
 ### Running it with docker
+
+```diff
+Modify .local.env
+make sure that env variable LOCAL_ENV is set to "docker" before
+
+```
 
 ```sh
 npm install
@@ -107,4 +119,5 @@ I wished I could have more time to add more test, but unfortunately I don't have
 
 #### Node version used with NVM:
 
-v16.13.2
+v16.13.2\
+If you are running a different version and it does not work try removing package-lock.json and node_modules and run npm install again

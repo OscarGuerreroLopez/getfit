@@ -4,10 +4,10 @@
   "license": "MIT",
   "scripts": {
     "start": "nx serve",
-    "build": "nx build",
+    "build": "npm run lint && nx build",
     "test": "nx run-many --all --target=test",
     "serve:all": "nx run-many --target=serve --projects=user,exercise,orch --parallel",
-    "build:all": "nx run-many --target=build --projects=user,exercise,orch --parallel",
+    "build:all": "npm run lint && nx run-many --target=build --projects=user,exercise,orch --parallel",
     "deploy:user": "nx deploy user",
     "deploy:exercise": "nx deploy exercise",
     "deploy:orch": "nx deploy orch",

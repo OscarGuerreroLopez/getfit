@@ -12,6 +12,7 @@ jobs:
 
       - run: npx nx workspace-lint
       - run: npx nx format:check
+      - run: npx nx run-many --all --target=test 
       - run: npx nx affected --base=$NX_BASE --head=$NX_HEAD --target=lint --parallel=3
       - run: npx nx affected --base=$NX_BASE --head=$NX_HEAD --target=test --parallel=3 --ci --code-coverage
       - run: npx nx affected --base=$NX_BASE --head=$NX_HEAD --target=build --parallel=3

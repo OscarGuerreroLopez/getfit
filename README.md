@@ -6,18 +6,18 @@ I left the env on purpose, I would never do that in a normal scenario but just f
 
 ## Description
 
-This is just a simple test where I used a monorepo trying to mimic two microservices that can be deployed individually. Tried to follow the clean architecture features where the domain (entities and use-cases) are separated from the implementation and the framework. All the dependencies are injected, respecting the dependency inversion principle and SOLID.
+This is just a simple test where I used a monorepo trying to mimic two microservices that can be deployed individually and also an orchestrator to make the validations for the user and call the right service to handle the request. Tried to follow the clean architecture features where the domain (entities and use-cases) are separated from the implementation and the framework. All the dependencies are injected, respecting the dependency inversion principle and SOLID.
 
 ## Structure
 
 In this monorepo we have two applications, one that handles the user and authentication and the other that handles the exercise business context.
 
-Logging could have been done right, like to Datadog or Kibana for example, but just for this exercise I am loggin to the console.
+Logging could have been done right, like to Datadog or Kibana for example, but just for this exercise I am login to the console.
 Since it is abstracted that could change at any moment by modifying the logger service.
 
 #### App
 
-The app part handles the routing of the requests. Directs the request to the appropriate use case to handle it
+The app part handles the routing of the requests. Directs the request to the appropriate service to handle it. It is composed of a main orch service that does the validation and proxies the request to the right service
 
 #### Libs
 
@@ -49,6 +49,7 @@ npm run serve_all
 npm install
 npm run deploy:user
 npm run deploy:exercise
+npm run deploy:orch
 docker-compose --env-file .local.env  up -d
 ```
 
@@ -57,11 +58,12 @@ docker-compose --env-file .local.env  up -d
 . add user\
 
 ```
-curl --location --request POST 'http://localhost:3333/user' \
+curl --location --request POST 'http://localhost:8888/user' \
 --header 'Content-Type: application/json' \
 --data-raw '{
-    "username": "pepito",
-    "password": "Abc123"
+    "username": "testuser1",
+    "password": "Abc123",
+    "role": "user"
 }'
 
 ```
@@ -69,10 +71,10 @@ curl --location --request POST 'http://localhost:3333/user' \
 . get login token
 
 ```
-curl --location --request POST 'http://localhost:3333/user/login' \
+curl --location --request POST 'http://localhost:8888/user/login' \
 --header 'Content-Type: application/json' \
 --data-raw '{
-    "username": "pepito",
+    "username": "testuser1",
     "password": "Abc123"
 }'
 ```
@@ -80,19 +82,19 @@ curl --location --request POST 'http://localhost:3333/user/login' \
 . add exercise
 
 ```
-curl --location --request POST 'http://localhost:3334/exercise/' \
---header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBlcGl0byIsImlhdCI6MTY2NTkzODA2MCwiZXhwIjoxNjY2NTQyODYwfQ.65yq6we7-4nakYoLDJ8y4DHiuTm_5RwynGDLDRsWJS8' \
+curl --location --request POST 'http://localhost:8888/exercise' \
+--header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3R1c2VyMSIsImlhdCI6MTY2NzgwNjk4MSwiZXhwIjoxNjY4NDExNzgxfQ.1J_5vgbCT2TKqSdVXaGRKitgI9jcfk0r0NMDZPPk4gs' \
 --header 'Content-Type: application/json' \
 --data-raw '{
-    "content": "Abc123"
+    "content": "Abc1235"
 }'
 ```
 
 . get exercises
 
 ```
-curl --location --request GET 'http://localhost:3334/exercise/' \
---header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBlcGl0byIsImlhdCI6MTY2NTkzODA2MCwiZXhwIjoxNjY2NTQyODYwfQ.65yq6we7-4nakYoLDJ8y4DHiuTm_5RwynGDLDRsWJS8'
+curl --location --request GET 'http://localhost:8888/exercise' \
+--header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3R1c2VyMSIsImlhdCI6MTY2NzgwNjk4MSwiZXhwIjoxNjY4NDExNzgxfQ.1J_5vgbCT2TKqSdVXaGRKitgI9jcfk0r0NMDZPPk4gs'
 ```
 
 #### DB
@@ -101,4 +103,8 @@ I used sqlite for simplicity, in the repo there is some persistance of the data 
 
 #### Unit test
 
-I wished I could have more time to add more test, but unfortunely I don't have much time, if required I can try
+I wished I could have more time to add more test, but unfortunately I don't have much time.
+
+#### Node version used with NVM:
+
+v16.13.2

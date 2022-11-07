@@ -77,14 +77,4 @@ export class AppController {
 
     return accessToken;
   }
-
-  @Post('auth')
-  @HttpCode(200)
-  async auth(@Body() auth: AuthDto, @Request() req: ExpressRequest) {
-    const accessToken = await this.checkTokenUsecaseProxy
-      .getInstance()
-      .execute(auth.token, req.headers['request-code'] as string);
-
-    return accessToken;
-  }
 }

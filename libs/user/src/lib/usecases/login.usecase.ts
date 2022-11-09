@@ -29,8 +29,9 @@ export class LoginUseCases {
         'user validation login',
         `${username} password mismatch. request-code=${request_code}`
       );
-      throw this.exceptionService.UnauthorizedException({
+      throw this.exceptionService.unauthorizedException({
         message: 'Something went wrong, check logs',
+        code_error: 333,
       });
     }
 

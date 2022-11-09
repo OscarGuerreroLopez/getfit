@@ -56,7 +56,7 @@ describe('addUser usecase', () => {
     } catch (error) {
       expect(exception.badRequestException).toHaveBeenCalled();
       expect(exception.badRequestException).toHaveBeenCalledWith({
-        code_error: 400,
+        code_error: 222,
         message: 'Error adding the exercise, check logs',
       });
       expect(logger.warn).toHaveBeenCalled();

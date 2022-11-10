@@ -47,7 +47,7 @@ export class AddExerciseUseCase {
       );
       throw this.exception.badRequestException({
         message: 'Error adding the exercise, check logs',
-        code_error: 400,
+        code_error: 222,
       });
     }
   }

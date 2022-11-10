@@ -32,7 +32,7 @@ export class AddUserUseCase {
       );
       throw this.exceptionService.badRequestException({
         message: 'Error adding the user, check logs',
-        code_error: 400,
+        code_error: 444,
       });
     }
   }

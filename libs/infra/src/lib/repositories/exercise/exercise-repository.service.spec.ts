@@ -29,10 +29,12 @@ const findAndCountMock = [
   2,
 ];
 
-const repositoryMockFactory: () => MockType<Repository<any>> = jest.fn(() => ({
-  findAndCount: jest.fn((entity) => entity),
-  save: jest.fn((entity) => entity),
-}));
+const repositoryMockFactory: () => MockType<Repository<never>> = jest.fn(
+  () => ({
+    findAndCount: jest.fn((entity) => entity),
+    save: jest.fn((entity) => entity),
+  })
+);
 describe('exercise-repository.service test', () => {
   let service: ExerciseRepositoryService;
   let repositoryMock: MockType<Repository<ExerciseEntity>>;

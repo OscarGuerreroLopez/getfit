@@ -1,4 +1,4 @@
-import { HttpException } from '@nestjs/common';
+import { HttpException } from '../exceptions/httpException';
 
 import { Test, TestingModule } from '@nestjs/testing';
 import { ExceptionsService } from './exceptions.service';

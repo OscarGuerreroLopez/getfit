@@ -2,19 +2,19 @@ import {
   ArgumentsHost,
   Catch,
   ExceptionFilter,
-  HttpException,
   HttpStatus,
 } from '@nestjs/common';
 import { LoggerService } from '../../logger/logger.service';
 import { IFormatExceptionMessage } from '@getfit/domain';
+import { HttpException } from '../../exceptions/httpException';
 
 @Catch()
 export class AllExceptionFilter implements ExceptionFilter {
   constructor(private readonly logger: LoggerService) {}
-  catch(exception: any, host: ArgumentsHost) {
+  catch(exception: unknown, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse();
-    const request: any = ctx.getRequest();
+    const request = ctx.getRequest();
 
     const status =
       exception instanceof HttpException
@@ -22,7 +22,7 @@ export class AllExceptionFilter implements ExceptionFilter {
         : HttpStatus.INTERNAL_SERVER_ERROR;
     const message =
       exception instanceof HttpException
-        ? (exception.getResponse() as IFormatExceptionMessage)
+        ? (exception.getMessage() as IFormatExceptionMessage)
         : { message: 'check logs', code_error: undefined };
 
     const responseData = {
@@ -41,7 +41,11 @@ export class AllExceptionFilter implements ExceptionFilter {
   }
 
   private logMessage(
-    request: any,
+    request: {
+      path: unknown;
+      method: unknown;
+      headers: { [x: string]: unknown };
+    },
     message: IFormatExceptionMessage,
     status: number
   ) {

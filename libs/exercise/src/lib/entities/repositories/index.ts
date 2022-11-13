@@ -1,4 +1,4 @@
-import { IExerciseModel } from '../../types';
+import { IExerciseModel } from '../../entities/model';
 import { ExerciseModel } from '../model';
 
 export interface IExerciseRepository {

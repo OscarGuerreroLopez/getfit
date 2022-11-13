@@ -1,4 +1,4 @@
-import { IExerciseModel } from '../types';
+import { IExerciseModel } from '../entities/model';
 
 export interface IExerciseWithuser extends IExerciseModel {
   user: { name: string };

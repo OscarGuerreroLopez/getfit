@@ -1,9 +1,11 @@
 import { AddExerciseUseCase } from './addExercise.usecase';
 import { ILogger, IException } from '@getfit/domain';
 import { IExerciseRepository } from '../entities/repositories';
-import { ExerciseModel } from '../entities/model';
+import { ExerciseModel, IExerciseModel } from '../entities/model';
 
 jest.useFakeTimers().setSystemTime(new Date('2022-11-04'));
+
+jest.mock('uuid', () => ({ v4: () => 'hjhj87878' }));
 
 const withLongContent = {
   userId: 1,
@@ -62,7 +64,7 @@ describe('addUser usecase', () => {
       expect(logger.warn).toHaveBeenCalled();
       expect(logger.warn).toHaveBeenCalledWith(
         'AddUExerciseUseCase',
-        'Content exceeds the 100 limit. request-code=we345jgt$$5'
+        'Content is missing or exceeds the 100 limit. request-code=we345jgt$$5'
       );
     }
   });
@@ -73,8 +75,13 @@ describe('addUser usecase', () => {
     });
 
     (exerciseRepository.insert as jest.Mock).mockImplementation(
-      async (exercise: ExerciseModel) => {
-        return { ...exercise, id: 111 };
+      async (exercise: ExerciseModel): Promise<IExerciseModel> => {
+        return {
+          id: exercise.id,
+          userId: exercise.userId,
+          content: exercise.content.value,
+          created_at: new Date(),
+        };
       }
     );
 
@@ -88,24 +95,20 @@ describe('addUser usecase', () => {
       request_code
     );
 
-    expect(result).toEqual({
-      userId: 1,
-      content: 'Abc123A',
-      created_at,
-      id: 111,
-    });
-
-    expect(exerciseRepository.insert).toHaveBeenCalledWith({
+    const exerciseModel = ExerciseModel.create({
       userId,
       content,
       created_at,
-      id: undefined,
     });
+
+    expect(result.content).toEqual(content);
+
+    expect(exerciseRepository.insert).toHaveBeenCalledWith(exerciseModel);
 
     expect(logger.log).toHaveBeenCalled();
     expect(logger.log).toHaveBeenCalledWith(
       'AddUExerciseUseCase',
-      'Exercise 111 added. request-code=we345jgt$$5'
+      'Exercise hjhj87878 added. request-code=we345jgt$$5'
     );
   });
 });

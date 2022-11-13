@@ -1,43 +1,48 @@
-import { IExerciseModel } from '../../types';
+// to do delete IExercisemodel from types
+// import { IExerciseModel } from '../../types';
 
-export class ExerciseModel {
-  public id?: number;
-  public userId!: number;
-  public content!: string;
-  public created_at!: Date;
+import { Content } from './content';
+import { Entity } from '@getfit/domain';
 
-  constructor(model: IExerciseModel) {
-    this.userId = this.makeUserId(model.userId);
-    this.content = this.makeContent(model.content);
-    this.created_at = this.makeCreatedAt(model.created_at);
-    this.id = model.id;
+interface ExerciseProps {
+  userId: number;
+  content: Content;
+  created_at: Date;
+}
+export interface IExerciseModel {
+  id?: string;
+  userId: number;
+  content: string;
+  created_at: Date;
+}
+
+export class ExerciseModel extends Entity<ExerciseProps> {
+  userId: number;
+  content: Content;
+  created_at: Date;
+
+  private constructor(props: ExerciseProps, id?: string) {
+    super(props, id);
+    this.content = props.content;
+    this.userId = props.userId;
+    this.created_at = props.created_at;
   }
 
-  private makeUserId(userId: number | undefined) {
-    if (userId === 0 || !userId) {
-      throw new Error('Incorrect or missing userID');
+  public static create(props: IExerciseModel) {
+    if (!props.content) {
+      throw new Error('Must provide a content ');
     }
 
-    return userId;
-  }
-
-  private makeContent(content: string | undefined) {
-    if (!content) {
-      throw new Error('Missing content');
+    if (!props.created_at) {
+      throw new Error('created date must be supplied');
     }
 
-    if (content.length > 100) {
-      throw new Error('Content exceeds the 100 limit');
+    if (!props.userId) {
+      throw new Error('missing userId');
     }
 
-    return content;
-  }
+    const content = Content.create(props.content);
 
-  private makeCreatedAt(date: Date | undefined) {
-    if (!date) {
-      throw new Error('Missing the date');
-    }
-
-    return date;
+    return new ExerciseModel({ ...props, content }, props.id);
   }
 }

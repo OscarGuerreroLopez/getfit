@@ -42,23 +42,28 @@ export class ExerciseRepositoryService implements IExerciseRepository {
   }
 
   private toExerciseModel(exerciseEntity: ExerciseEntity): IExerciseModel {
-    const { id, userId, content, created_at } = exerciseEntity;
-    const exerciseModel = new ExerciseModel({
+    const { exerciseId, userId, content, created_at } = exerciseEntity;
+    const exerciseModel = ExerciseModel.create({
       userId,
       content,
       created_at,
-      id,
+      id: exerciseId,
     });
 
-    return exerciseModel;
+    return {
+      id: exerciseModel.id,
+      userId: exerciseModel.userId,
+      content: exerciseModel.content.value,
+      created_at: exerciseModel.created_at,
+    };
   }
 
   private toExerciseEntity(exerciseModel: ExerciseModel): ExerciseEntity {
     const exerciseEntity: ExerciseEntity = new ExerciseEntity();
 
-    exerciseEntity.id = exerciseModel.id;
+    exerciseEntity.exerciseId = exerciseModel.id;
     exerciseEntity.userId = exerciseModel.userId;
-    exerciseEntity.content = exerciseModel.content;
+    exerciseEntity.content = exerciseModel.content.value;
     exerciseEntity.created_at = exerciseModel.created_at;
 
     return exerciseEntity;

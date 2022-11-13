@@ -1,5 +1,5 @@
 import { ILogger, IException } from '@getfit/domain';
-import { IExerciseModel } from '../types';
+import { IExerciseModel } from '../entities/model';
 import { IExerciseRepository } from '../entities/repositories';
 import { ExerciseModel } from '../exercise';
 
@@ -24,7 +24,7 @@ export class AddExerciseUseCase {
 
       const created_at = new Date();
 
-      const exerciseModel = new ExerciseModel({
+      const exerciseModel = ExerciseModel.create({
         userId,
         content,
         created_at,

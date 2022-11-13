@@ -11,18 +11,25 @@ type MockType<T> = {
   [P in keyof T]?: jest.Mock;
 };
 
+const idArray = [
+  'e5c1601d-71e8-490e-87d7-adeed8196cfa',
+  'e5c1601d-71e8-490e-87d7-adeed8196ccc',
+];
+
 const findAndCountMock = [
   [
     {
       content: 'Abc1235Abc1235Abc1235Abc1235',
       created_at: new Date(),
       id: 25,
+      exerciseId: 'e5c1601d-71e8-490e-87d7-adeed8196cfa',
       userId: 4,
     },
     {
       content: 'Abc1235Abc1235Abc1235Abc1235',
       created_at: new Date(),
       id: 26,
+      exerciseId: 'e5c1601d-71e8-490e-87d7-adeed8196ccc',
       userId: 4,
     },
   ],
@@ -54,13 +61,11 @@ describe('exercise-repository.service test', () => {
   });
 
   it('should get the right exercises', async () => {
-    let counterId = 25;
     repositoryMock.findAndCount?.mockReturnValue(findAndCountMock);
     const result = await service.getExercises(4);
 
-    result.exercises.map((exercise) => {
-      expect(exercise.id).toStrictEqual(counterId);
-      counterId += 1;
+    result.exercises.map((exercise, index) => {
+      expect(exercise.id).toStrictEqual(idArray[index]);
       expect(exercise.userId).toStrictEqual(4);
       expect(exercise.content).toStrictEqual('Abc1235Abc1235Abc1235Abc1235');
     });
@@ -69,24 +74,24 @@ describe('exercise-repository.service test', () => {
   });
 
   it('should insert and return the right value', async () => {
+    const exerciseModel = ExerciseModel.create({
+      userId: 4,
+      content: 'Abc1235',
+      created_at: new Date(),
+    });
+
     repositoryMock.save?.mockReturnValue({
       content: 'Abc1235',
       created_at: new Date(),
       id: 30,
+      exerciseId: exerciseModel.id,
       userId: 4,
-    });
-
-    const exerciseModel = new ExerciseModel({
-      userId: 4,
-      content: 'Abc1235',
-      created_at: new Date(),
-      id: undefined,
     });
 
     const result = await service.insert(exerciseModel);
 
     expect(result.content).toStrictEqual('Abc1235');
-    expect(result.id).toStrictEqual(30);
+    expect(result.id).toStrictEqual(exerciseModel.id);
     expect(result.userId).toStrictEqual(4);
     expect(result.created_at).toEqual(new Date());
   });

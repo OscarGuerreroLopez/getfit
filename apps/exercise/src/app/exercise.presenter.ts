@@ -1,7 +1,7 @@
 import { IExerciseModel } from '@getfit/exercise';
 
 export class ExercisePresenter {
-  id: number;
+  id: string;
   userId: number;
   content: string;
   created_at: Date;

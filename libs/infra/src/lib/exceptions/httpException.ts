@@ -1,6 +1,9 @@
-import { IFormatExceptionMessage } from '@getfit/domain';
+import {
+  IFormatExceptionMessage,
+  HttpException as HttpExceptionImp,
+} from '@getfit/domain';
 
-export class HttpException extends Error {
+export class HttpException extends Error implements HttpExceptionImp {
   status: number;
   message: string;
   code_error: number;

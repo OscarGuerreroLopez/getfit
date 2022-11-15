@@ -9,7 +9,7 @@ interface ExerciseProps {
   content: Content;
   created_at: Date;
 }
-export interface IExerciseModel {
+interface IExerciseModel {
   id?: string;
   userId: number;
   content: string;

@@ -1,7 +1,6 @@
 import { ILogger, IException } from '@getfit/domain';
-import { IExerciseModel } from '../entities/model';
+import { ExerciseModel } from '../entities/model';
 import { IExerciseRepository } from '../entities/repositories';
-import { ExerciseModel } from '../exercise';
 
 export class AddExerciseUseCase {
   constructor(
@@ -14,7 +13,7 @@ export class AddExerciseUseCase {
     userId: number,
     content: string,
     request_code = '0'
-  ): Promise<IExerciseModel> {
+  ): Promise<ExerciseModel> {
     try {
       const { count } = await this.exerciseRepository.getExercises(userId);
 

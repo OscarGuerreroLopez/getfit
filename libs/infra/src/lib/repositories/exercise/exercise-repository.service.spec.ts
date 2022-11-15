@@ -67,7 +67,9 @@ describe('exercise-repository.service test', () => {
     result.exercises.map((exercise, index) => {
       expect(exercise.id).toStrictEqual(idArray[index]);
       expect(exercise.userId).toStrictEqual(4);
-      expect(exercise.content).toStrictEqual('Abc1235Abc1235Abc1235Abc1235');
+      expect(exercise.content.value).toStrictEqual(
+        'Abc1235Abc1235Abc1235Abc1235'
+      );
     });
 
     expect(result.count).toStrictEqual(2);
@@ -90,7 +92,7 @@ describe('exercise-repository.service test', () => {
 
     const result = await service.insert(exerciseModel);
 
-    expect(result.content).toStrictEqual('Abc1235');
+    expect(result.content.value).toStrictEqual('Abc1235');
     expect(result.id).toStrictEqual(exerciseModel.id);
     expect(result.userId).toStrictEqual(4);
     expect(result.created_at).toEqual(new Date());

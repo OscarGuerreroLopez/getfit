@@ -23,7 +23,9 @@ export class AppController {
       .getInstance()
       .execute(parsedUser.userId, parsedUser.username);
 
-    return new GetExercisePresenter(getExercises);
+    console.log('@@@111', getExercises);
+
+    return getExercises;
   }
 
   @Post()

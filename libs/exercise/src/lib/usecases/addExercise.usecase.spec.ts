@@ -1,7 +1,7 @@
 import { AddExerciseUseCase } from './addExercise.usecase';
 import { ILogger, IException } from '@getfit/domain';
 import { IExerciseRepository } from '../entities/repositories';
-import { ExerciseModel, IExerciseModel } from '../entities/model';
+import { ExerciseModel } from '../entities/model';
 
 jest.useFakeTimers().setSystemTime(new Date('2022-11-04'));
 
@@ -75,13 +75,14 @@ describe('addUser usecase', () => {
     });
 
     (exerciseRepository.insert as jest.Mock).mockImplementation(
-      async (exercise: ExerciseModel): Promise<IExerciseModel> => {
-        return {
+      async (exercise: ExerciseModel): Promise<ExerciseModel> => {
+        const result = ExerciseModel.create({
           id: exercise.id,
           userId: exercise.userId,
           content: exercise.content.value,
           created_at: new Date(),
-        };
+        });
+        return result;
       }
     );
 
@@ -101,7 +102,7 @@ describe('addUser usecase', () => {
       created_at,
     });
 
-    expect(result.content).toEqual(content);
+    expect(result.content.value).toEqual(content);
 
     expect(exerciseRepository.insert).toHaveBeenCalledWith(exerciseModel);
 

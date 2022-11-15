@@ -1,11 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import {
-  IExerciseRepository,
-  IExerciseModel,
-  ExerciseModel,
-} from '@getfit/exercise';
+import { IExerciseRepository, ExerciseModel } from '@getfit/exercise';
 import { ExerciseEntity } from '../../entities/exercise.entity';
 
 @Injectable()
@@ -16,7 +12,7 @@ export class ExerciseRepositoryService implements IExerciseRepository {
   ) {}
 
   async getExercises(userId: number): Promise<{
-    exercises: IExerciseModel[];
+    exercises: ExerciseModel[];
     count: number;
   }> {
     const exercisesEntity = await this.exerciseRepository.findAndCount({
@@ -30,18 +26,19 @@ export class ExerciseRepositoryService implements IExerciseRepository {
     );
 
     const count = exercisesEntity[1];
+    console.log('@@@111', { exercises, count });
 
     return { exercises, count };
   }
 
-  async insert(exercise: ExerciseModel): Promise<IExerciseModel> {
+  async insert(exercise: ExerciseModel): Promise<ExerciseModel> {
     const exerciseEntity = this.toExerciseEntity(exercise);
     const result = await this.exerciseRepository.save(exerciseEntity);
 
     return this.toExerciseModel(result);
   }
 
-  private toExerciseModel(exerciseEntity: ExerciseEntity): IExerciseModel {
+  private toExerciseModel(exerciseEntity: ExerciseEntity): ExerciseModel {
     const { exerciseId, userId, content, created_at } = exerciseEntity;
     const exerciseModel = ExerciseModel.create({
       userId,
@@ -50,12 +47,7 @@ export class ExerciseRepositoryService implements IExerciseRepository {
       id: exerciseId,
     });
 
-    return {
-      id: exerciseModel.id,
-      userId: exerciseModel.userId,
-      content: exerciseModel.content.value,
-      created_at: exerciseModel.created_at,
-    };
+    return exerciseModel;
   }
 
   private toExerciseEntity(exerciseModel: ExerciseModel): ExerciseEntity {

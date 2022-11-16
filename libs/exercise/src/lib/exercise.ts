@@ -1,3 +1,2 @@
-export * from './entities/model';
-export * from './entities/repositories';
+export * from './models';
 export * from './usecases';

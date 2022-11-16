@@ -1,5 +1,4 @@
 import { ExerciseModel } from '.';
-import { Content } from './content';
 
 jest.useFakeTimers().setSystemTime(new Date('2022-11-04'));
 
@@ -48,7 +47,7 @@ describe('ExerciseModel test', () => {
     }).toEqual(expectedResult);
   });
 
-  it('should update the user entity correctly', () => {
+  it('should update the user entity correctly by creating a new user', () => {
     const exercise1 = ExerciseModel.create({
       userId: 1,
       created_at: new Date(),

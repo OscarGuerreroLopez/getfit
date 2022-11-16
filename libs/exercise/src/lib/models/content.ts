@@ -1,10 +1,10 @@
-import { ValueObject } from '@getfit/domain';
+import {
+  ValueObject,
+  ContentProps,
+  Content as ContentImp,
+} from '@getfit/domain';
 
-interface ContentProps {
-  value: string;
-}
-
-export class Content extends ValueObject<ContentProps> {
+export class Content extends ValueObject<ContentProps> implements ContentImp {
   get value(): string {
     return this.props.value;
   }

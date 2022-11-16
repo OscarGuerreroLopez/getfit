@@ -2,26 +2,22 @@
 // import { IExerciseModel } from '../../types';
 
 import { Content } from './content';
-import { Entity } from '@getfit/domain';
+import {
+  Entity,
+  IExerciseModel,
+  IExerciseProps,
+  ExerciseModel as ExerciseModelIpm,
+} from '@getfit/domain';
 
-interface ExerciseProps {
-  userId: number;
-  content: Content;
-  created_at: Date;
-}
-interface IExerciseModel {
-  id?: string;
-  userId: number;
-  content: string;
-  created_at: Date;
-}
-
-export class ExerciseModel extends Entity<ExerciseProps> {
+export class ExerciseModel
+  extends Entity<IExerciseProps>
+  implements ExerciseModelIpm
+{
   userId: number;
   content: Content;
   created_at: Date;
 
-  private constructor(props: ExerciseProps, id?: string) {
+  private constructor(props: IExerciseProps, id?: string) {
     super(props, id);
     this.content = props.content;
     this.userId = props.userId;

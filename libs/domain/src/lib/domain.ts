@@ -5,3 +5,6 @@ export * from './adapters/jwt.interface';
 export * from './config/jwt.interface';
 export * from './config/role.enum';
 export * from './entity';
+export * from './exercise/models/exerciseModel';
+export * from './exercise/value-objects/content';
+export * from './exercise/repositories';

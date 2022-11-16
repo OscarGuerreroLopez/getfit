@@ -1,7 +1,7 @@
 import { AddExerciseUseCase } from './addExercise.usecase';
-import { ILogger, IException } from '@getfit/domain';
-import { IExerciseRepository } from '../entities/repositories';
-import { ExerciseModel } from '../entities/model';
+import { ILogger, IException, IExerciseRepository } from '@getfit/domain';
+
+import { ExerciseModel } from '../models';
 
 jest.useFakeTimers().setSystemTime(new Date('2022-11-04'));
 

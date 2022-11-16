@@ -1,4 +1,4 @@
-import { ExerciseModel } from '../model';
+import { ExerciseModel } from '../models/exerciseModel';
 
 export interface IExerciseRepository {
   getExercises(userid: number): Promise<{

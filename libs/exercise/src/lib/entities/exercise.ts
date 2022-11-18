@@ -28,7 +28,7 @@ export class ExerciseEntity extends Entity<ExerciseProps> {
   }
 
   get userId() {
-    return this.props.userId;
+    return this.props.userId.value;
   }
 
   get content() {

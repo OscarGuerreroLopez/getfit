@@ -1,4 +1,4 @@
-import { AbstractValueObject } from "./abstractValueObject";
+import { AbstractValueObject } from './abstractValueObject';
 
 interface ValueObjectProps {
   [index: string]: any;

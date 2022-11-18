@@ -13,8 +13,6 @@ describe('Exercise Entity test', () => {
     expect(user.userId).toStrictEqual(1);
     expect(user.content).toStrictEqual('blablabla');
     expect(user.created_at).toStrictEqual(new Date('2022-11-04T00:00:00.000Z'));
-
-    console.log('@@@111', user.id);
   });
 
   it('should vaidate if two entities are the same', () => {

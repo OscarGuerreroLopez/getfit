@@ -56,7 +56,7 @@ describe('Exercise Entity test', () => {
     }
   });
 
-  it('shuld return an error if content is too lomg', () => {
+  it('should return an error if content is too lomg', () => {
     try {
       ExerciseEntity.creaate({
         userId: 1,

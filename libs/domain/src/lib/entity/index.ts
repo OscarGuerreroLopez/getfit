@@ -7,11 +7,11 @@ const isEntity = (v: any): v is Entity<any> => {
 
 export abstract class Entity<T> {
   readonly id: string;
-  protected props: T;
+  protected readonly props: T;
 
   constructor(props: T, id?: string) {
     this.id = id ? id : uuidv4();
-    this.props = props;
+    this.props = Object.freeze(props);
   }
 
   public equals(object?: Entity<T>): boolean {

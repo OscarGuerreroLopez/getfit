@@ -1,11 +1,12 @@
 import { Entity } from '@getfit/domain';
 import { Content } from './content';
 import { UserId } from './userId';
+import { DateVO } from './date';
 
 interface ExerciseProps {
   userId: UserId;
   content: Content;
-  created_at: Date;
+  created_at: DateVO;
 }
 
 interface ExerciseArgs {
@@ -21,7 +22,7 @@ export class ExerciseEntity extends Entity<ExerciseProps> {
       {
         userId: UserId.create(args.userId),
         content: Content.create(args.content),
-        created_at: args.created_at,
+        created_at: DateVO.create(args.created_at),
       },
       args.id
     );
@@ -36,6 +37,6 @@ export class ExerciseEntity extends Entity<ExerciseProps> {
   }
 
   get created_at() {
-    return this.props.created_at;
+    return this.props.created_at.value;
   }
 }

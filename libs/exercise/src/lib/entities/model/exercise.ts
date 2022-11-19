@@ -1,7 +1,7 @@
 import { Entity } from '@getfit/domain';
-import { Content } from './content';
-import { UserId } from './userId';
-import { DateVO } from './date';
+import { Content } from '../content';
+import { UserId } from '../userId';
+import { DateVO } from '../date';
 
 interface ExerciseProps {
   userId: UserId;
@@ -16,9 +16,9 @@ interface ExerciseArgs {
   created_at: Date;
 }
 
-export class ExerciseEntity extends Entity<ExerciseProps> {
-  static creaate(args: ExerciseArgs): ExerciseEntity {
-    return new ExerciseEntity(
+export class ExerciseModel extends Entity<ExerciseProps> {
+  static create(args: ExerciseArgs): ExerciseModel {
+    return new ExerciseModel(
       {
         userId: UserId.create(args.userId),
         content: Content.create(args.content),
@@ -34,6 +34,10 @@ export class ExerciseEntity extends Entity<ExerciseProps> {
 
   get content() {
     return this.props.content.value;
+  }
+
+  set content(content: string) {
+    this.props.content = Content.create(content);
   }
 
   get created_at() {

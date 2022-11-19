@@ -1,4 +1,3 @@
-import { isDeepStrictEqual } from 'util';
 import { v4 as uuidv4 } from 'uuid';
 
 const isEntity = (v: any): v is Entity<any> => {
@@ -7,11 +6,11 @@ const isEntity = (v: any): v is Entity<any> => {
 
 export abstract class Entity<T> {
   readonly id: string;
-  protected readonly props: T;
+  protected props: T;
 
   constructor(props: T, id?: string) {
     this.id = id ? id : uuidv4();
-    this.props = Object.freeze(props);
+    this.props = props;
   }
 
   public equals(object?: Entity<T>): boolean {
@@ -27,7 +26,7 @@ export abstract class Entity<T> {
       return false;
     }
 
-    return isDeepStrictEqual(this, object);
+    return this.id === object.id;
   }
 }
 

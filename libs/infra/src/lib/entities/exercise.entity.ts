@@ -5,6 +5,9 @@ export class ExerciseEntity {
   @PrimaryGeneratedColumn()
   id?: number;
 
+  @Column({ unique: true })
+  exerciseId?: string;
+
   @Column({ name: 'userId' })
   userId!: number;
 

@@ -1,12 +1,12 @@
-import { IExerciseModel } from '@getfit/exercise';
+import { ExerciseModel } from '@getfit/exercise';
 
 export class ExercisePresenter {
-  id: number;
+  id: string;
   userId: number;
   content: string;
   created_at: Date;
 
-  constructor(exerciseDetail: IExerciseModel) {
+  constructor(exerciseDetail: ExerciseModel) {
     this.id = exerciseDetail.id;
     this.userId = exerciseDetail.userId;
     this.content = exerciseDetail.content;

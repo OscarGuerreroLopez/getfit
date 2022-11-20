@@ -1,7 +1,19 @@
 import { IException, ILogger } from '@getfit/domain';
 
 import { IExerciseRepository } from '../entities/repositories';
-import { IGetExercise } from '../types';
+
+export interface IGetExercise {
+  count: number;
+  user: {
+    name: string;
+    userId: number;
+  };
+  exercises: {
+    id: string;
+    content: string;
+    created_at: Date;
+  }[];
+}
 
 export class GetExercisesUseCase {
   constructor(
@@ -10,23 +22,25 @@ export class GetExercisesUseCase {
     private readonly exception: IException
   ) {}
 
-  async execute(
-    userId: number,
-    username: string,
-    request_code = '0'
-  ): Promise<IGetExercise> {
+  async execute(userId: number, username: string, request_code = '0') {
     try {
       const { exercises, count } = await this.exerciseRepository.getExercises(
         userId
       );
 
-      const exercisesMap = exercises.map((exercise) => ({
-        ...exercise,
-        user: { name: username },
-      }));
+      const exercisesMap = exercises.map((exercise) => {
+        const result = {
+          id: exercise.id,
+          content: exercise.content,
+          created_at: exercise.created_at,
+        };
+
+        return result;
+      });
 
       return {
         count,
+        user: { name: username, userId },
         exercises: exercisesMap,
       };
     } catch (error) {

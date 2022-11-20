@@ -1,7 +1,29 @@
 import { IException, ILogger } from '@getfit/domain';
 
 import { IExerciseRepository } from '../entities/repositories';
-import { IGetExercise } from '../types';
+
+export interface IExerciseWithUser {
+  id: string;
+  user: {
+    name: string;
+    id: number;
+  };
+  content: string;
+  created_at: Date;
+}
+
+export interface IGetExercise {
+  count: number;
+  exercises: {
+    id: string;
+    user: {
+      name: string;
+      id: number;
+    };
+    content: string;
+    created_at: Date;
+  }[];
+}
 
 export class GetExercisesUseCase {
   constructor(
@@ -20,10 +42,16 @@ export class GetExercisesUseCase {
         userId
       );
 
-      const exercisesMap = exercises.map((exercise) => ({
-        ...exercise,
-        user: { name: username },
-      }));
+      const exercisesMap: IExerciseWithUser[] = exercises.map((exercise) => {
+        const result = {
+          id: exercise.id,
+          user: { name: username, id: exercise.userId },
+          content: exercise.content,
+          created_at: exercise.created_at,
+        };
+
+        return result;
+      });
 
       return {
         count,

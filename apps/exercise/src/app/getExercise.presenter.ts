@@ -1,8 +1,8 @@
-import { IExerciseWithuser, IGetExercise } from '@getfit/exercise';
+import { IExerciseWithUser, IGetExercise } from '@getfit/exercise';
 
 export class GetExercisePresenter {
   count: number;
-  exercises: IExerciseWithuser[];
+  exercises: IExerciseWithUser[];
 
   constructor(exercisesDetail: IGetExercise) {
     this.count = exercisesDetail.count;

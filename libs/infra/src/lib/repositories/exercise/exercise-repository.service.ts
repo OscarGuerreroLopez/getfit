@@ -1,11 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import {
-  IExerciseRepository,
-  IExerciseModel,
-  ExerciseModel,
-} from '@getfit/exercise';
+import { IExerciseRepository, ExerciseModel } from '@getfit/exercise';
 import { ExerciseEntity } from '../../entities/exercise.entity';
 
 @Injectable()
@@ -16,7 +12,7 @@ export class ExerciseRepositoryService implements IExerciseRepository {
   ) {}
 
   async getExercises(userId: number): Promise<{
-    exercises: IExerciseModel[];
+    exercises: ExerciseModel[];
     count: number;
   }> {
     const exercisesEntity = await this.exerciseRepository.findAndCount({
@@ -34,20 +30,21 @@ export class ExerciseRepositoryService implements IExerciseRepository {
     return { exercises, count };
   }
 
-  async insert(exercise: ExerciseModel): Promise<IExerciseModel> {
+  async insert(exercise: ExerciseModel): Promise<ExerciseModel> {
     const exerciseEntity = this.toExerciseEntity(exercise);
     const result = await this.exerciseRepository.save(exerciseEntity);
 
     return this.toExerciseModel(result);
   }
 
-  private toExerciseModel(exerciseEntity: ExerciseEntity): IExerciseModel {
-    const { id, userId, content, created_at } = exerciseEntity;
-    const exerciseModel = new ExerciseModel({
+  private toExerciseModel(exerciseEntity: ExerciseEntity): ExerciseModel {
+    const { exerciseId, userId, content, created_at } = exerciseEntity;
+
+    const exerciseModel = ExerciseModel.create({
       userId,
       content,
       created_at,
-      id,
+      id: exerciseId,
     });
 
     return exerciseModel;
@@ -56,7 +53,7 @@ export class ExerciseRepositoryService implements IExerciseRepository {
   private toExerciseEntity(exerciseModel: ExerciseModel): ExerciseEntity {
     const exerciseEntity: ExerciseEntity = new ExerciseEntity();
 
-    exerciseEntity.id = exerciseModel.id;
+    exerciseEntity.exerciseId = exerciseModel.id;
     exerciseEntity.userId = exerciseModel.userId;
     exerciseEntity.content = exerciseModel.content;
     exerciseEntity.created_at = exerciseModel.created_at;

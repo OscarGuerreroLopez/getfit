@@ -1,10 +1,9 @@
-import { IExerciseModel } from '../../types';
 import { ExerciseModel } from '../model';
 
 export interface IExerciseRepository {
   getExercises(userid: number): Promise<{
-    exercises: IExerciseModel[];
+    exercises: ExerciseModel[];
     count: number;
   }>;
-  insert(exercise: ExerciseModel): Promise<IExerciseModel>;
+  insert(exercise: ExerciseModel): Promise<ExerciseModel>;
 }

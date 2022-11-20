@@ -6,4 +6,5 @@ export interface IExerciseRepository {
     count: number;
   }>;
   insert(exercise: ExerciseModel): Promise<ExerciseModel>;
+  update(exercise: ExerciseModel): Promise<ExerciseModel>;
 }

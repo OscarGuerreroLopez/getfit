@@ -1,7 +1,3 @@
-export function infra(): string {
-  return 'infra';
-}
-
 export * from './usecases-proxy/user.usecases.proxy.module';
 export * from './usecases-proxy/exercises.usecases.proxy.module';
 export * from './usecases-proxy/usecases-proxy';
@@ -17,3 +13,5 @@ export * from './config/environment-config/environment-config.service';
 export * from './common/guards/get-user.guard';
 export * from './common/guards/user-exercise.guard';
 export * from './common/guards/api-guard.guard';
+export * from './exceptions/badRequest.exception';
+export * from './exceptions/httpException';

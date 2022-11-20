@@ -4,6 +4,7 @@ import { IExerciseRepository } from '../entities/repositories';
 import { ExerciseModel } from '../entities/model';
 
 jest.useFakeTimers().setSystemTime(new Date('2022-11-04'));
+jest.mock('uuid', () => ({ v4: () => '123456789' }));
 
 const withLongContent = {
   userId: 1,
@@ -56,13 +57,13 @@ describe('addUser usecase', () => {
     } catch (error) {
       expect(exception.badRequestException).toHaveBeenCalled();
       expect(exception.badRequestException).toHaveBeenCalledWith({
-        code_error: 400,
+        code_error: 222,
         message: 'Error adding the exercise, check logs',
       });
       expect(logger.warn).toHaveBeenCalled();
       expect(logger.warn).toHaveBeenCalledWith(
         'AddUExerciseUseCase',
-        'Content exceeds the 100 limit. request-code=we345jgt$$5'
+        'Content is too long. request-code=we345jgt$$5'
       );
     }
   });
@@ -74,7 +75,7 @@ describe('addUser usecase', () => {
 
     (exerciseRepository.insert as jest.Mock).mockImplementation(
       async (exercise: ExerciseModel) => {
-        return { ...exercise, id: 111 };
+        return exercise;
       }
     );
 
@@ -88,24 +89,23 @@ describe('addUser usecase', () => {
       request_code
     );
 
-    expect(result).toEqual({
-      userId: 1,
-      content: 'Abc123A',
-      created_at,
-      id: 111,
-    });
+    expect(result.id).toEqual('123456789');
+    expect(result.userId).toEqual(1);
+    expect(result.content).toEqual('Abc123A');
+    expect(result.created_at).toEqual(created_at);
 
-    expect(exerciseRepository.insert).toHaveBeenCalledWith({
+    const expectedModel = ExerciseModel.create({
       userId,
       content,
       created_at,
-      id: undefined,
     });
+
+    expect(exerciseRepository.insert).toHaveBeenCalledWith(expectedModel);
 
     expect(logger.log).toHaveBeenCalled();
     expect(logger.log).toHaveBeenCalledWith(
       'AddUExerciseUseCase',
-      'Exercise 111 added. request-code=we345jgt$$5'
+      'Exercise 123456789 added. request-code=we345jgt$$5'
     );
   });
 });

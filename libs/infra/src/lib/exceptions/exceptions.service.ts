@@ -1,28 +1,22 @@
-import {
-  BadRequestException,
-  ForbiddenException,
-  Injectable,
-  InternalServerErrorException,
-  UnauthorizedException,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { IException, IFormatExceptionMessage } from '@getfit/domain';
+import { BadRequestException } from './badRequest.exception';
+import { ForbiddenException } from './forbidden.exception';
+import { UnauthorizedException } from './unauthorize.exception';
+import { NotFoundException } from './userNotFound.exception';
 
 @Injectable()
 export class ExceptionsService implements IException {
   badRequestException(data: IFormatExceptionMessage) {
     return new BadRequestException(data);
   }
-  internalServerErrorException(data?: IFormatExceptionMessage) {
-    return new InternalServerErrorException(data);
-  }
-  forbiddenException(data?: IFormatExceptionMessage) {
+  forbiddenException(data: IFormatExceptionMessage) {
     return new ForbiddenException(data);
   }
-  userNotFound(data?: IFormatExceptionMessage) {
+  userNotFound(data: IFormatExceptionMessage) {
     return new NotFoundException(data);
   }
-  UnauthorizedException(data?: IFormatExceptionMessage) {
+  unauthorizedException(data: IFormatExceptionMessage) {
     return new UnauthorizedException(data);
   }
 }

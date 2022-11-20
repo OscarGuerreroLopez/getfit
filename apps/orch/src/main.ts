@@ -26,7 +26,7 @@ async function bootstrap() {
   app.use(
     rateLimit({
       windowMs: 15 * 60 * 1000, // 15 minutes
-      max: 100 // limit each IP to 100 requests per windowMs
+      max: 100, // limit each IP to 100 requests per windowMs
     })
   );
   // Filter
@@ -44,7 +44,7 @@ async function bootstrap() {
     } catch (error) {
       res
         .status(error.status || 500)
-        .send({ message: error.message || 'undefined' });
+        .send({ message: error.message || JSON.stringify(error) });
     }
   });
 
@@ -65,7 +65,7 @@ async function bootstrap() {
         } catch (error) {
           res.status(error.status || 500).send(error);
         }
-      }
+      },
     })
   );
 
@@ -86,7 +86,7 @@ async function bootstrap() {
         } catch (error) {
           res.status(error.status || 500).send(error);
         }
-      }
+      },
     })
   );
 

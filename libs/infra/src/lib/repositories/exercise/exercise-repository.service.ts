@@ -46,8 +46,6 @@ export class ExerciseRepositoryService implements IExerciseRepository {
       exerciseEntity
     );
 
-    console.log('@@@333', result);
-
     if (result.affected === 0) {
       throw new Error(`cannot update ${exercise.id}. No record found`);
     }

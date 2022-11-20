@@ -1,5 +1,5 @@
 import { ExerciseRepositoryService } from './exercise-repository.service';
-import { Repository } from 'typeorm';
+import { Entity, Repository } from 'typeorm';
 import { Test, TestingModule } from '@nestjs/testing';
 import { ExerciseEntity } from '../../entities/exercise.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
@@ -41,6 +41,7 @@ const repositoryMockFactory: () => MockType<Repository<never>> = jest.fn(
   () => ({
     findAndCount: jest.fn((entity) => entity),
     save: jest.fn((entity) => entity),
+    update: jest.fn((entity) => entity),
   })
 );
 describe('exercise-repository.service test', () => {
@@ -98,5 +99,51 @@ describe('exercise-repository.service test', () => {
     expect(result.id).toStrictEqual('123456789');
     expect(result.userId).toStrictEqual(4);
     expect(result.created_at).toEqual(new Date());
+  });
+
+  it('should update correctly', async () => {
+    repositoryMock.update?.mockReturnValue({
+      generatedMaps: [],
+      raw: [],
+      affected: 1,
+    });
+
+    const exerciseModel = ExerciseModel.create({
+      userId: 4,
+      content: 'Abc1235',
+      created_at: new Date(),
+      id: '123456789',
+    });
+
+    const result = await service.update(exerciseModel);
+
+    expect(result.id).toStrictEqual('123456789');
+  });
+
+  it('should fail if record not found for update', async () => {
+    try {
+      repositoryMock.update?.mockReturnValue({
+        generatedMaps: [],
+        raw: [],
+        affected: 0,
+      });
+
+      const exerciseModel = ExerciseModel.create({
+        userId: 4,
+        content: 'Abc1235',
+        created_at: new Date(),
+        id: '123456789',
+      });
+
+      await service.update(exerciseModel);
+    } catch (error) {
+      if (error instanceof Error) {
+        expect(error.message).toEqual(
+          'cannot update 123456789. No record found'
+        );
+      } else {
+        throw new Error('error type not correct');
+      }
+    }
   });
 });

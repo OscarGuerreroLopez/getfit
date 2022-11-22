@@ -1,16 +1,3 @@
-// {
-//     exercises: [
-//       ExerciseModel {
-//         id: 'abd06458-dcbc-4855-b920-98f0f962e040',
-//         props: [Object]
-//       },
-//       ExerciseModel {
-//         id: 'cbc9b1e3-1dc1-4bcc-b065-b46f9f6676fe',
-//         props: [Object]
-//       }
-//     ],
-//     count: 2
-//   }
 import { GetExercisesUseCase } from './getExercises.usecases';
 import { ILogger, IException } from '@getfit/domain';
 import { IExerciseRepository } from '../entities/repositories';
@@ -53,7 +40,6 @@ describe('Get Exercises Use Case Test', () => {
 
     exerciseRepository = {} as IExerciseRepository;
     exerciseRepository.getExercises = jest.fn();
-    exerciseRepository.insert = jest.fn();
 
     getExercisesUseCase = new GetExercisesUseCase(
       exerciseRepository,
@@ -102,12 +88,12 @@ describe('Get Exercises Use Case Test', () => {
         code_error: 400,
         message: 'Error getting the exercise, check logs',
       });
-    }
 
-    expect(logger.warn).toHaveBeenCalled();
-    expect(logger.warn).toHaveBeenCalledWith(
-      'GetUExerciseUseCase',
-      'Ugly error. request-code=123456789'
-    );
+      expect(logger.warn).toHaveBeenCalled();
+      expect(logger.warn).toHaveBeenCalledWith(
+        'GetUExerciseUseCase',
+        'Ugly error. request-code=123456789'
+      );
+    }
   });
 });

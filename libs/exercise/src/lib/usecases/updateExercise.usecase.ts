@@ -20,6 +20,7 @@ export class UpdateExerciseUseCase {
 
     try {
       const original = await this.exerciseRepository.getExercise(exerciseId);
+      console.log('@@@111', original);
 
       if (!original) {
         throw new Error(
@@ -39,7 +40,8 @@ export class UpdateExerciseUseCase {
         original.content = content;
       }
 
-      const result = this.exerciseRepository.update(original);
+      const result = await this.exerciseRepository.update(original);
+      console.log('@@@222', result);
 
       return result;
     } catch (error) {

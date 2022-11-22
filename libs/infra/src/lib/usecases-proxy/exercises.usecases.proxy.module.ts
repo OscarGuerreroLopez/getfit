@@ -5,7 +5,11 @@ import {
   ExerciseRepositoryService,
 } from '../repositories/exercise';
 import { UseCaseProxy } from './usecases-proxy';
-import { AddExerciseUseCase, GetExercisesUseCase } from '@getfit/exercise';
+import {
+  AddExerciseUseCase,
+  GetExercisesUseCase,
+  UpdateExerciseUseCase,
+} from '@getfit/exercise';
 
 import { LoggerModule } from '../logger/logger.module';
 import { LoggerService } from '../logger/logger.service';
@@ -20,6 +24,8 @@ export class ExerciseUseCasesProxyModule {
     'GetExercisesDetailUseCasesProxy';
   static ADD_EXERCISES_DETAIL_USECASES_PROXY =
     'AddExercisesDetailUseCasesProxy';
+  static UPDATE_EXERCISES_DETAIL_USECASES_PROXY =
+    'UpdateExercisesDetailUseCasesProxy';
 
   static register(): DynamicModule {
     return {
@@ -36,6 +42,23 @@ export class ExerciseUseCasesProxyModule {
           ) =>
             new UseCaseProxy(
               new AddExerciseUseCase(
+                exerciseRepository,
+                logger,
+                exceptionsService
+              )
+            ),
+        },
+        {
+          inject: [ExerciseRepositoryService, LoggerService, ExceptionsService],
+          provide:
+            ExerciseUseCasesProxyModule.UPDATE_EXERCISES_DETAIL_USECASES_PROXY,
+          useFactory: (
+            exerciseRepository: ExerciseRepositoryService,
+            logger: LoggerService,
+            exceptionsService: ExceptionsService
+          ) =>
+            new UseCaseProxy(
+              new UpdateExerciseUseCase(
                 exerciseRepository,
                 logger,
                 exceptionsService
@@ -63,6 +86,7 @@ export class ExerciseUseCasesProxyModule {
       exports: [
         ExerciseUseCasesProxyModule.ADD_EXERCISES_DETAIL_USECASES_PROXY,
         ExerciseUseCasesProxyModule.GET_EXERCISES_DETAIL_USECASES_PROXY,
+        ExerciseUseCasesProxyModule.UPDATE_EXERCISES_DETAIL_USECASES_PROXY,
       ],
     };
   }

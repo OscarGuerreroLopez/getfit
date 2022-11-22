@@ -30,11 +30,41 @@ export class ExerciseRepositoryService implements IExerciseRepository {
     return { exercises, count };
   }
 
+  async getExercise(exerciseId: string): Promise<ExerciseModel> {
+    const exerciseEntity = await this.exerciseRepository.findOne({
+      where: {
+        exerciseId,
+      },
+    });
+
+    if (!exerciseEntity) {
+      throw new Error(`Exercise ${exerciseId} not found`);
+    }
+
+    return this.toExerciseModel(exerciseEntity);
+  }
+
   async insert(exercise: ExerciseModel): Promise<ExerciseModel> {
     const exerciseEntity = this.toExerciseEntity(exercise);
     const result = await this.exerciseRepository.save(exerciseEntity);
 
     return this.toExerciseModel(result);
+  }
+
+  async update(exercise: ExerciseModel): Promise<ExerciseModel> {
+    const exerciseEntity = this.toExerciseEntity(exercise);
+    const result = await this.exerciseRepository.update(
+      {
+        exerciseId: exerciseEntity.exerciseId,
+      },
+      exerciseEntity
+    );
+
+    if (result.affected === 0) {
+      throw new Error(`cannot update ${exercise.id}. No record found`);
+    }
+
+    return exercise;
   }
 
   private toExerciseModel(exerciseEntity: ExerciseEntity): ExerciseModel {

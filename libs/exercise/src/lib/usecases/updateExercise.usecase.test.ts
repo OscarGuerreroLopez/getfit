@@ -88,7 +88,7 @@ describe('Get Exercises Use Case Test', () => {
         expect(logger.warn).toHaveBeenCalled();
         expect(logger.warn).toHaveBeenCalledWith(
           'UpdateUExerciseUseCase',
-          'Nothing to update. request-code=123456789. request-code=123456789'
+          'Nothing to update. request-code=123456789'
         );
       }
     }
@@ -119,7 +119,7 @@ describe('Get Exercises Use Case Test', () => {
         expect(logger.warn).toHaveBeenCalled();
         expect(logger.warn).toHaveBeenCalledWith(
           'UpdateUExerciseUseCase',
-          'user 2 is trying to update an exercise that belongs to 1. ExerciseID: abd06458-dcbc-4855-b920-98f0f962e040. request-code=123456789 . request-code=123456789'
+          'user 2 is trying to update an exercise that belongs to 1. ExerciseID: abd06458-dcbc-4855-b920-98f0f962e040 . request-code=123456789'
         );
       }
     }
@@ -152,7 +152,7 @@ describe('Get Exercises Use Case Test', () => {
         expect(logger.warn).toHaveBeenCalled();
         expect(logger.warn).toHaveBeenCalledWith(
           'UpdateUExerciseUseCase',
-          'Not able to find the exercise in DB abd06458-dcbc-4855-b920-98f0f962e040. request-code=123456789. request-code=123456789'
+          'Not able to find the exercise in DB abd06458-dcbc-4855-b920-98f0f962e040. request-code=123456789'
         );
       }
     }

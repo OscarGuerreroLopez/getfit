@@ -1,6 +1,5 @@
 import { ILogger, IException } from '@getfit/domain';
 import { IExerciseRepository } from '../entities/repositories';
-import { ExerciseModel } from '../exercise';
 
 interface params {
   exerciseId: string;
@@ -20,28 +19,24 @@ export class UpdateExerciseUseCase {
 
     try {
       const original = await this.exerciseRepository.getExercise(exerciseId);
-      console.log('@@@111', original);
 
       if (!original) {
-        throw new Error(
-          `Not able to find the exercise in DB ${exerciseId}. request-code=${request_code}`
-        );
+        throw new Error(`Not able to find the exercise in DB ${exerciseId}`);
       }
 
       if (original.userId !== userId) {
         throw new Error(
-          `user ${userId} is trying to update an exercise that belongs to ${original.userId}. ExerciseID: ${exerciseId}. request-code=${request_code} `
+          `user ${userId} is trying to update an exercise that belongs to ${original.userId}. ExerciseID: ${exerciseId} `
         );
       }
 
       if (original.content === content) {
-        throw new Error(`Nothing to update. request-code=${request_code}`);
+        throw new Error(`Nothing to update`);
       } else {
         original.content = content;
       }
 
       const result = await this.exerciseRepository.update(original);
-      console.log('@@@222', result);
 
       return result;
     } catch (error) {

@@ -1,5 +1,5 @@
 import { ExerciseRepositoryService } from './exercise-repository.service';
-import { Entity, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { Test, TestingModule } from '@nestjs/testing';
 import { ExerciseEntity } from '../../entities/exercise.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';

@@ -19,7 +19,7 @@ export class AddExerciseUseCase {
       const { count } = await this.exerciseRepository.getExercises(userId);
 
       if (count > 9) {
-        throw `user ${userId} has more than 10 exercises already`;
+        throw new Error(`user ${userId} has more than 10 exercises already`);
       }
 
       const created_at = new Date();

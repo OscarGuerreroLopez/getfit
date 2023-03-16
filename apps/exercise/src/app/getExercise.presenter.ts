@@ -1,4 +1,4 @@
-import { ExerciseModel, IGetExercise } from '@getfit/exercise';
+import { IGetExercise } from '@getfit/exercise';
 
 export class GetExercisePresenter {
   count: number;

@@ -1,7 +1,7 @@
 import { ILogger, IException } from '@getfit/domain';
 import { IExerciseRepository } from '../entities/repositories';
 
-interface params {
+interface ExerciseParams {
   exerciseId: string;
   userId: number;
   content: string;
@@ -14,7 +14,7 @@ export class UpdateExerciseUseCase {
     private readonly exception: IException
   ) {}
 
-  async execute(exercise: params, request_code = '0') {
+  async execute(exercise: ExerciseParams, request_code = '0') {
     const { exerciseId, userId, content } = exercise;
 
     try {

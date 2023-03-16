@@ -14,7 +14,7 @@ export class CheckTokenUseCase {
       const decoded = await this.jwtTokenService.checkToken(token);
       const user = await this.checkuserExists(decoded.username);
       if (!user) {
-        throw `User ${decoded.username} not found on DB`;
+        throw new Error(`User ${decoded.username} not found on DB`);
       }
 
       return {

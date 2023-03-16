@@ -17,7 +17,7 @@ export class GetUserUseCase {
     try {
       const user = await this.userRepository.getUserByUsername(userName);
       if (!user) {
-        throw `User ${userName} not found on the DB`;
+        throw new Error(`User ${userName} not found on the DB`);
       }
 
       return user;

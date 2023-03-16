@@ -5,7 +5,6 @@ import {
   Inject,
   Param,
   Post,
-  HttpCode,
   Request,
   UseGuards,
 } from '@nestjs/common';
@@ -24,7 +23,6 @@ import {
   CheckTokenUseCase,
 } from '@getfit/user';
 import { UserPresenter } from './user.presenter';
-import { AuthDto } from './auth.dto';
 import { LoginDto } from './login.dto';
 
 @Controller()

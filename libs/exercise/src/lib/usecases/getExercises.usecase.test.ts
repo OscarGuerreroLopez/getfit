@@ -57,7 +57,7 @@ describe('Get Exercises Use Case Test', () => {
 
     expect(result.count).toStrictEqual(2);
 
-    result.exercises.map((exercise, index) => {
+    result.exercises.forEach((exercise, index) => {
       expect(exercise.id).toStrictEqual(
         mockGetExercisesRepo.exercises[index].id
       );

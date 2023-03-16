@@ -67,7 +67,7 @@ describe('exercise-repository.service test', () => {
     repositoryMock.findAndCount?.mockReturnValue(findAndCountMock);
     const result = await service.getExercises(4);
 
-    result.exercises.map((exercise) => {
+    result.exercises.forEach((exercise) => {
       expect(exercise.id).toStrictEqual(idArray[counterId]);
       counterId += 1;
       expect(exercise.userId).toStrictEqual(4);
